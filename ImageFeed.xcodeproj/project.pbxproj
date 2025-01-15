@@ -40,6 +40,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		3A0D15DC2D1EC1F6002762D3 /* ImagesList */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ImagesList;
+			sourceTree = "<group>";
+		};
 		3A4DAFB62D17028E00ECACBA /* ImageFeed */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -88,6 +93,7 @@
 		3A4DAFAB2D17028E00ECACBA = {
 			isa = PBXGroup;
 			children = (
+				3A0D15DC2D1EC1F6002762D3 /* ImagesList */,
 				3A4DAFB62D17028E00ECACBA /* ImageFeed */,
 				3A4DAFD12D17029200ECACBA /* ImageFeedTests */,
 				3A4DAFDB2D17029200ECACBA /* ImageFeedUITests */,
@@ -121,6 +127,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				3A0D15DC2D1EC1F6002762D3 /* ImagesList */,
 				3A4DAFB62D17028E00ECACBA /* ImageFeed */,
 			);
 			name = ImageFeed;
