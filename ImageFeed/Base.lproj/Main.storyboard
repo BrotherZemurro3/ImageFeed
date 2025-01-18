@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gI1-yT-l8D">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -132,6 +132,9 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="Exit" title=""/>
+                                <connections>
+                                    <action selector="logOutButtonTapped:" destination="gI1-yT-l8D" eventType="touchUpInside" id="cnd-g7-ifb"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvh-Pd-ItR" userLabel="Name Label">
                                 <rect key="frame" x="16" y="169" width="361" height="28"/>
@@ -158,6 +161,13 @@
                             <constraint firstItem="lCR-uj-Jj1" firstAttribute="top" secondItem="Lvh-Pd-ItR" secondAttribute="bottom" constant="8" id="xFV-B9-5nz"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="descriptionLabel" destination="a48-VS-wNq" id="inh-iF-KTu"/>
+                        <outlet property="logOutButton" destination="dTm-p0-6Ms" id="GRm-Zg-Vic"/>
+                        <outlet property="loginLabel" destination="lCR-uj-Jj1" id="L1i-bO-My6"/>
+                        <outlet property="nameLabel" destination="Lvh-Pd-ItR" id="t95-6K-cAS"/>
+                        <outlet property="usersAvatar" destination="kzS-eK-2tR" id="GUD-vD-vTJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7gj-Mr-jg0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
