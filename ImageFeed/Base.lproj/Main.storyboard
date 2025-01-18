@@ -97,9 +97,77 @@
             </objects>
             <point key="canvasLocation" x="52.671755725190835" y="-2.1126760563380285"/>
         </scene>
+        <!--Profile View Controller-->
+        <scene sceneID="jSo-Rd-2aT">
+            <objects>
+                <viewController id="gI1-yT-l8D" customClass="ProfileViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xWb-QD-pO9">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Photo" translatesAutoresizingMaskIntoConstraints="NO" id="kzS-eK-2tR" userLabel="UsersAvatar">
+                                <rect key="frame" x="16" y="91" width="70" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="70" id="EPn-f6-KvC"/>
+                                    <constraint firstAttribute="width" secondItem="kzS-eK-2tR" secondAttribute="height" multiplier="1:1" id="oRL-IH-udN"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@ekaterina_nov" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lCR-uj-Jj1" userLabel="Login Label">
+                                <rect key="frame" x="16" y="205" width="361" height="15.666666666666657"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" name="YP White"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello, world!" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a48-VS-wNq" userLabel="Description">
+                                <rect key="frame" x="16" y="228.66666666666666" width="361" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" name="YP White"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTm-p0-6Ms" userLabel="LogOut Button">
+                                <rect key="frame" x="333" y="104" width="44" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="yHh-tD-9Fi"/>
+                                    <constraint firstAttribute="width" constant="44" id="zKL-bK-8KX"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="Exit" title=""/>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Екатерина Новикова" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvh-Pd-ItR" userLabel="Name Label">
+                                <rect key="frame" x="16" y="169" width="361" height="28"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                                <color key="textColor" name="YP White"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ha3-EB-k5f"/>
+                        <color key="backgroundColor" name="YP Black"/>
+                        <constraints>
+                            <constraint firstItem="ha3-EB-k5f" firstAttribute="trailing" secondItem="Lvh-Pd-ItR" secondAttribute="trailing" constant="16" id="0ac-gL-8xk"/>
+                            <constraint firstItem="Lvh-Pd-ItR" firstAttribute="trailing" secondItem="a48-VS-wNq" secondAttribute="trailing" id="44Z-vz-sCN"/>
+                            <constraint firstItem="a48-VS-wNq" firstAttribute="top" secondItem="lCR-uj-Jj1" secondAttribute="bottom" constant="8" id="ERA-9L-afr"/>
+                            <constraint firstItem="Lvh-Pd-ItR" firstAttribute="leading" secondItem="a48-VS-wNq" secondAttribute="leading" id="Eti-xv-i7m"/>
+                            <constraint firstItem="Lvh-Pd-ItR" firstAttribute="leading" secondItem="kzS-eK-2tR" secondAttribute="leading" id="FA3-Tx-kQC"/>
+                            <constraint firstItem="Lvh-Pd-ItR" firstAttribute="leading" secondItem="lCR-uj-Jj1" secondAttribute="leading" id="H4K-gV-k5i"/>
+                            <constraint firstItem="dTm-p0-6Ms" firstAttribute="centerY" secondItem="kzS-eK-2tR" secondAttribute="centerY" id="LLG-cv-7lJ"/>
+                            <constraint firstItem="ha3-EB-k5f" firstAttribute="trailing" secondItem="dTm-p0-6Ms" secondAttribute="trailing" constant="16" id="YCB-2a-ZvC"/>
+                            <constraint firstItem="Lvh-Pd-ItR" firstAttribute="top" secondItem="kzS-eK-2tR" secondAttribute="bottom" constant="8" id="YIL-As-CYp"/>
+                            <constraint firstItem="kzS-eK-2tR" firstAttribute="top" secondItem="ha3-EB-k5f" secondAttribute="top" constant="32" id="aWW-oX-AXT"/>
+                            <constraint firstItem="kzS-eK-2tR" firstAttribute="leading" secondItem="ha3-EB-k5f" secondAttribute="leading" constant="16" id="vsN-bz-F1I"/>
+                            <constraint firstItem="Lvh-Pd-ItR" firstAttribute="trailing" secondItem="lCR-uj-Jj1" secondAttribute="trailing" id="x5j-3X-VoX"/>
+                            <constraint firstItem="lCR-uj-Jj1" firstAttribute="top" secondItem="Lvh-Pd-ItR" secondAttribute="bottom" constant="8" id="xFV-B9-5nz"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7gj-Mr-jg0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-292.36641221374043" y="-679.57746478873241"/>
+        </scene>
     </scenes>
     <resources>
         <image name="0" width="1600" height="1059"/>
+        <image name="Exit" width="24" height="24"/>
+        <image name="Photo" width="70" height="70"/>
         <image name="like_button_on" width="42" height="42"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
