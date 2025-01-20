@@ -30,6 +30,22 @@ class ImagesListViewController: UIViewController {
       
        
     }
+    
+    override func prepare(for seque: UIStoryboardSegue,  sender: Any?) {
+        if seque.identifier == "ShowSingleImage" {
+            guard
+                let viewController = seque.destination as? SingleImageViewController,
+                let indexPath = sender as? IndexPath
+            else {
+                assertionFailure("Invalid seque destination")
+                return
+            }
+            let image = UIImage(named: photosName[indexPath.row])
+            viewController.imageView.image = image
+        } else {
+            super.prepare(for: seque, sender: sender)
+        }
+    }
     }
 
 
@@ -62,7 +78,9 @@ let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "lik
 
 
 extension ImagesListViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {} // метод, отвечающий за дейсвтия, которые будут выполнены при тапе по ячейки таблицы. Адрес ячейки, содержащийся в indexPath передаётся в качестве аргумента. 1
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "ShowSingleImage", sender: indexPath)
+    } // метод, отвечающий за дейсвтия, которые будут выполнены при тапе по ячейки таблицы. Адрес ячейки, содержащийся в indexPath передаётся в качестве аргумента. 1
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
