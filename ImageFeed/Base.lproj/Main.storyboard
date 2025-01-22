@@ -114,7 +114,7 @@
                     <navigationItem key="navigationItem" id="oc3-lZ-bbW"/>
                     <connections>
                         <outlet property="tableView" destination="wQ3-V0-fgJ" id="vcf-q2-V9e"/>
-                        <segue destination="BAf-6A-DfU" kind="show" identifier="ShowSingleImage" id="ReL-Vj-9LL"/>
+                        <segue destination="BAf-6A-DfU" kind="presentation" identifier="ShowSingleImage" id="ReL-Vj-9LL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -203,11 +203,11 @@
             <objects>
                 <viewController id="BAf-6A-DfU" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fa7-W9-NJN">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="GRZ-V0-8vC">
-                                <rect key="frame" x="0.0" y="103" width="393" height="666"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="jHQ-16-NuA"/>
@@ -220,6 +220,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="SA5-N8-SfY"/>
+                    <connections>
+                        <outlet property="imageView" destination="GRZ-V0-8vC" id="Scw-GZ-u1R"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="23r-2E-TzU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

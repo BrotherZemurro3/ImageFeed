@@ -14,6 +14,7 @@ class ImagesListViewController: UIViewController {
     
     @IBOutlet private var tableView: UITableView!
     private let photosName: [String] = Array(0..<20).map{ "\($0)"}
+    private let showSingleImageSegueIdentifier = "ShowSingleImage"
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -31,22 +32,23 @@ class ImagesListViewController: UIViewController {
        
     }
     
-    override func prepare(for seque: UIStoryboardSegue,  sender: Any?) {
-        if seque.identifier == "ShowSingleImage" {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == showSingleImageSegueIdentifier {
             guard
-                let viewController = seque.destination as? SingleImageViewController,
+                let viewController = segue.destination as? SingleImageViewController,
                 let indexPath = sender as? IndexPath
             else {
-                assertionFailure("Invalid seque destination")
+                assertionFailure("Invalid segue destination")
                 return
             }
+            
             let image = UIImage(named: photosName[indexPath.row])
-            viewController.imageView.image = image
+            viewController.image = image
         } else {
-            super.prepare(for: seque, sender: sender)
+            super.prepare(for: segue, sender: sender)
         }
     }
-    }
+}
 
 
 extension ImagesListViewController: UITableViewDataSource {
@@ -59,7 +61,7 @@ extension ImagesListViewController: UITableViewDataSource {
         guard let imageListCell = cell as? ImagesListCell else { // Приведение типов для работы с ячейками, если ничего не будет, то вернем обычную ячейку
             return UITableViewCell()
         }
-        configCell(for: imageListCell, with: indexPath )
+        configCell(for: imageListCell, with: indexPath)
         return imageListCell // Возврат ячейчки, являющейся наследником UITableViewCell
     }
         }
@@ -79,7 +81,7 @@ let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "lik
 
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "ShowSingleImage", sender: indexPath)
+        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
     } // метод, отвечающий за дейсвтия, которые будут выполнены при тапе по ячейки таблицы. Адрес ячейки, содержащийся в indexPath передаётся в качестве аргумента. 1
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
