@@ -24,24 +24,19 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet private var imageView: UIImageView!
     
     override func viewDidLoad() {
-        
-        
         super.viewDidLoad()
+        guard let image else {return}
         imageView.image = image
-        rescaleAndCenterImageInScrollView(image: image!)
+        rescaleAndCenterImageInScrollView(image: image)
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
     }
     
     @IBAction func didTapBackButton() {
         dismiss(animated: true, completion: nil)
-        print("Нажата кнопка назад")
+        print("Нажата кнопка назад") // чек принт, т.к. срабатывает через раз
     }
-    
-    
-    //@IBAction private func didTapBackButton(_ sender: UIButton) {
-      //  dismiss(animated: true, completion: nil)
-   //}
+
     private func rescaleAndCenterImageInScrollView(image: UIImage) {
         let minZoomScale = scrollView.minimumZoomScale
         let maxZoomScale = scrollView.maximumZoomScale

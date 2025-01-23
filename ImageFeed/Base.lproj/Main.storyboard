@@ -233,6 +233,11 @@
                                     <action selector="didTapBackButton" destination="hvn-G5-vwg" eventType="touchUpInside" id="1sc-Jh-Mc6"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JrI-Bt-lRT">
+                                <rect key="frame" x="162" y="711" width="69" height="91"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="Sharing"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7S1-VQ-9GE"/>
                         <color key="backgroundColor" name="YP Black"/>
@@ -240,7 +245,11 @@
                             <constraint firstAttribute="bottom" secondItem="aRg-4C-db2" secondAttribute="bottom" id="0W7-UF-4cl"/>
                             <constraint firstItem="twl-NO-TWt" firstAttribute="top" secondItem="7S1-VQ-9GE" secondAttribute="top" constant="8" id="29c-hR-SUC"/>
                             <constraint firstItem="aRg-4C-db2" firstAttribute="top" secondItem="e7z-85-Yf3" secondAttribute="top" id="Ayj-Mf-BtT"/>
+                            <constraint firstItem="7S1-VQ-9GE" firstAttribute="bottom" secondItem="JrI-Bt-lRT" secondAttribute="bottom" constant="50" id="R7V-u1-8Ir"/>
+                            <constraint firstItem="JrI-Bt-lRT" firstAttribute="leading" secondItem="7S1-VQ-9GE" secondAttribute="leading" constant="162" id="afN-lX-vtD"/>
+                            <constraint firstItem="7S1-VQ-9GE" firstAttribute="trailing" secondItem="JrI-Bt-lRT" secondAttribute="trailing" constant="162" id="c2s-QQ-1BJ"/>
                             <constraint firstItem="7S1-VQ-9GE" firstAttribute="trailing" secondItem="aRg-4C-db2" secondAttribute="trailing" id="pLT-V9-oaA"/>
+                            <constraint firstItem="JrI-Bt-lRT" firstAttribute="top" secondItem="7S1-VQ-9GE" secondAttribute="top" constant="711" id="voS-bY-m6F"/>
                             <constraint firstItem="aRg-4C-db2" firstAttribute="leading" secondItem="7S1-VQ-9GE" secondAttribute="leading" id="wtI-yH-D15"/>
                             <constraint firstItem="twl-NO-TWt" firstAttribute="leading" secondItem="7S1-VQ-9GE" secondAttribute="leading" constant="8" id="zft-qO-2v4"/>
                         </constraints>
@@ -262,6 +271,7 @@
         <image name="Backward" width="24" height="24"/>
         <image name="Exit" width="24" height="24"/>
         <image name="Photo" width="70" height="70"/>
+        <image name="Sharing" width="50" height="50"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="tab_profile_active" width="31" height="30"/>
         <namedColor name="YP Black">
