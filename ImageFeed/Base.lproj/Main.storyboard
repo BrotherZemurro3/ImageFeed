@@ -208,10 +208,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aRg-4C-db2">
-                                <rect key="frame" x="-20" y="-20" width="433" height="882"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="882"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="Hsr-1A-ANq">
-                                        <rect key="frame" x="20" y="20" width="393" height="842"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
@@ -234,9 +234,16 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JrI-Bt-lRT">
-                                <rect key="frame" x="162" y="711" width="69" height="91"/>
+                                <rect key="frame" x="171.66666666666666" y="786" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="3bs-A9-ZfK"/>
+                                    <constraint firstAttribute="width" constant="50" id="qIV-DQ-BqN"/>
+                                </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="Sharing"/>
+                                <connections>
+                                    <action selector="didShareButton:" destination="hvn-G5-vwg" eventType="touchUpInside" id="oOZ-Av-quY"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7S1-VQ-9GE"/>
@@ -245,11 +252,9 @@
                             <constraint firstAttribute="bottom" secondItem="aRg-4C-db2" secondAttribute="bottom" id="0W7-UF-4cl"/>
                             <constraint firstItem="twl-NO-TWt" firstAttribute="top" secondItem="7S1-VQ-9GE" secondAttribute="top" constant="8" id="29c-hR-SUC"/>
                             <constraint firstItem="aRg-4C-db2" firstAttribute="top" secondItem="e7z-85-Yf3" secondAttribute="top" id="Ayj-Mf-BtT"/>
-                            <constraint firstItem="7S1-VQ-9GE" firstAttribute="bottom" secondItem="JrI-Bt-lRT" secondAttribute="bottom" constant="50" id="R7V-u1-8Ir"/>
-                            <constraint firstItem="JrI-Bt-lRT" firstAttribute="leading" secondItem="7S1-VQ-9GE" secondAttribute="leading" constant="162" id="afN-lX-vtD"/>
-                            <constraint firstItem="7S1-VQ-9GE" firstAttribute="trailing" secondItem="JrI-Bt-lRT" secondAttribute="trailing" constant="162" id="c2s-QQ-1BJ"/>
-                            <constraint firstItem="7S1-VQ-9GE" firstAttribute="trailing" secondItem="aRg-4C-db2" secondAttribute="trailing" id="pLT-V9-oaA"/>
-                            <constraint firstItem="JrI-Bt-lRT" firstAttribute="top" secondItem="7S1-VQ-9GE" secondAttribute="top" constant="711" id="voS-bY-m6F"/>
+                            <constraint firstItem="JrI-Bt-lRT" firstAttribute="centerX" secondItem="7S1-VQ-9GE" secondAttribute="centerX" id="UBn-kH-KiQ"/>
+                            <constraint firstItem="aRg-4C-db2" firstAttribute="trailing" secondItem="7S1-VQ-9GE" secondAttribute="trailing" id="pLT-V9-oaA"/>
+                            <constraint firstItem="7S1-VQ-9GE" firstAttribute="bottom" secondItem="JrI-Bt-lRT" secondAttribute="bottom" constant="16" id="rjZ-AK-4qW"/>
                             <constraint firstItem="aRg-4C-db2" firstAttribute="leading" secondItem="7S1-VQ-9GE" secondAttribute="leading" id="wtI-yH-D15"/>
                             <constraint firstItem="twl-NO-TWt" firstAttribute="leading" secondItem="7S1-VQ-9GE" secondAttribute="leading" constant="8" id="zft-qO-2v4"/>
                         </constraints>
@@ -258,6 +263,7 @@
                         <outlet property="backButton" destination="twl-NO-TWt" id="kQn-hZ-ovl"/>
                         <outlet property="imageView" destination="Hsr-1A-ANq" id="4TH-dK-cyj"/>
                         <outlet property="scrollView" destination="aRg-4C-db2" id="cXf-VH-9ek"/>
+                        <outlet property="shareButton" destination="JrI-Bt-lRT" id="iaG-OK-y1Z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oW5-CA-xQf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
