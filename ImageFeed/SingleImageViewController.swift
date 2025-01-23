@@ -14,7 +14,7 @@ final class SingleImageViewController: UIViewController {
             guard isViewLoaded, let image else { return }
             rescaleAndCenterImageInScrollView(image: image)
             imageView.frame.size = image.size
-            
+            centerImageView()
         }
     }
     
@@ -28,6 +28,7 @@ final class SingleImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.delegate = self
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
 
@@ -35,6 +36,7 @@ final class SingleImageViewController: UIViewController {
         imageView.image = image
         imageView.frame.size = image.size
         rescaleAndCenterImageInScrollView(image: image)
+        centerImageView()
     }
     
     @IBAction func didTapBackButton() {
@@ -62,12 +64,29 @@ final class SingleImageViewController: UIViewController {
         let x = (newContentSize.width - visibleRectSize.width) / 2
         let y = (newContentSize.height - visibleRectSize.height) / 2
         scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
+        centerImageView()
+    }
+    
+    private func centerImageView() {
+        guard let imageView = imageView else {return}
+        
+        let horizontalInset = max(0,(scrollView.bounds.width - imageView.frame.width * scrollView.zoomScale) / 2)
+        let verticalInset = max(0, (scrollView.bounds.height - imageView.frame.height * scrollView.zoomScale), 2)
+        
+        scrollView.contentInset = UIEdgeInsets(
+            top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset)
     }
 }
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
+    }
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        centerImageView()
+    }
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+        centerImageView()
     }
 }
 
