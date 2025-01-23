@@ -115,12 +115,12 @@
                     <navigationItem key="navigationItem" id="oc3-lZ-bbW"/>
                     <connections>
                         <outlet property="tableView" destination="wQ3-V0-fgJ" id="vcf-q2-V9e"/>
-                        <segue destination="BAf-6A-DfU" kind="presentation" identifier="ShowSingleImage" modalPresentationStyle="fullScreen" id="ReL-Vj-9LL"/>
+                        <segue destination="hvn-G5-vwg" kind="presentation" identifier="ShowSingleImage" modalPresentationStyle="fullScreen" id="9IT-hO-JAR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-216" y="-23"/>
+            <point key="canvasLocation" x="-132" y="-23"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="jSo-Rd-2aT">
@@ -200,51 +200,60 @@
             <point key="canvasLocation" x="-292.36641221374043" y="-679.57746478873241"/>
         </scene>
         <!--Single Image View Controller-->
-        <scene sceneID="FBd-Jd-VyO">
+        <scene sceneID="fcB-8L-6am">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="BAf-6A-DfU" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="fa7-W9-NJN">
+                <viewController modalPresentationStyle="fullScreen" id="hvn-G5-vwg" customClass="SingleImageViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="e7z-85-Yf3">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="GRZ-V0-8vC">
-                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5v9-wd-Td0">
-                                <rect key="frame" x="16" y="59" width="48" height="48"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aRg-4C-db2">
+                                <rect key="frame" x="-20" y="-20" width="433" height="882"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="0" translatesAutoresizingMaskIntoConstraints="NO" id="Hsr-1A-ANq">
+                                        <rect key="frame" x="20" y="20" width="393" height="842"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <viewLayoutGuide key="contentLayoutGuide" id="0JJ-nW-aGw"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="z4B-q8-m9W"/>
+                                <connections>
+                                    <outlet property="delegate" destination="hvn-G5-vwg" id="k7s-sZ-BbZ"/>
+                                </connections>
+                            </scrollView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="twl-NO-TWt">
+                                <rect key="frame" x="8" y="8" width="48" height="48"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="48" id="Ovf-fm-dKh"/>
-                                    <constraint firstAttribute="width" constant="48" id="vTY-Qf-lti"/>
+                                    <constraint firstAttribute="width" constant="48" id="Y1k-TC-2Rx"/>
+                                    <constraint firstAttribute="height" constant="48" id="xJV-HJ-YGM"/>
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="" image="Backward">
-                                    <color key="titleColor" name="YP White"/>
-                                </state>
+                                <state key="normal" image="Backward"/>
                                 <connections>
-                                    <action selector="didTapBackButton:" destination="BAf-6A-DfU" eventType="touchUpInside" id="aMU-TU-asL"/>
+                                    <action selector="didTapBackButton" destination="hvn-G5-vwg" eventType="touchUpInside" id="1sc-Jh-Mc6"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="jHQ-16-NuA"/>
+                        <viewLayoutGuide key="safeArea" id="7S1-VQ-9GE"/>
                         <color key="backgroundColor" name="YP Black"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="GRZ-V0-8vC" secondAttribute="trailing" id="6o8-Oj-9te"/>
-                            <constraint firstItem="GRZ-V0-8vC" firstAttribute="leading" secondItem="fa7-W9-NJN" secondAttribute="leading" id="Ijb-8Y-ykD"/>
-                            <constraint firstItem="5v9-wd-Td0" firstAttribute="top" secondItem="fa7-W9-NJN" secondAttribute="top" constant="59" id="InF-hC-QX7"/>
-                            <constraint firstAttribute="bottom" secondItem="GRZ-V0-8vC" secondAttribute="bottom" id="Ogh-7X-lC5"/>
-                            <constraint firstItem="5v9-wd-Td0" firstAttribute="leading" secondItem="fa7-W9-NJN" secondAttribute="leading" constant="16" id="T17-fk-8dB"/>
-                            <constraint firstItem="GRZ-V0-8vC" firstAttribute="top" secondItem="fa7-W9-NJN" secondAttribute="top" id="gml-Dk-FPL"/>
+                            <constraint firstAttribute="bottom" secondItem="aRg-4C-db2" secondAttribute="bottom" id="0W7-UF-4cl"/>
+                            <constraint firstItem="twl-NO-TWt" firstAttribute="top" secondItem="7S1-VQ-9GE" secondAttribute="top" constant="8" id="29c-hR-SUC"/>
+                            <constraint firstItem="aRg-4C-db2" firstAttribute="top" secondItem="e7z-85-Yf3" secondAttribute="top" id="Ayj-Mf-BtT"/>
+                            <constraint firstItem="7S1-VQ-9GE" firstAttribute="trailing" secondItem="aRg-4C-db2" secondAttribute="trailing" id="pLT-V9-oaA"/>
+                            <constraint firstItem="aRg-4C-db2" firstAttribute="leading" secondItem="7S1-VQ-9GE" secondAttribute="leading" id="wtI-yH-D15"/>
+                            <constraint firstItem="twl-NO-TWt" firstAttribute="leading" secondItem="7S1-VQ-9GE" secondAttribute="leading" constant="8" id="zft-qO-2v4"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="SA5-N8-SfY"/>
                     <connections>
-                        <outlet property="backButton" destination="5v9-wd-Td0" id="x1p-ax-Zte"/>
-                        <outlet property="imageView" destination="GRZ-V0-8vC" id="Scw-GZ-u1R"/>
+                        <outlet property="backButton" destination="twl-NO-TWt" id="kQn-hZ-ovl"/>
+                        <outlet property="imageView" destination="Hsr-1A-ANq" id="4TH-dK-cyj"/>
+                        <outlet property="scrollView" destination="aRg-4C-db2" id="cXf-VH-9ek"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="23r-2E-TzU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oW5-CA-xQf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="813" y="-13"/>
+            <point key="canvasLocation" x="800.76335877862596" y="-23.239436619718312"/>
         </scene>
     </scenes>
     <resources>

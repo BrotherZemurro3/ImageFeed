@@ -11,23 +11,53 @@ import Foundation
 final class SingleImageViewController: UIViewController {
     var image: UIImage? {
         didSet {
-            guard isViewLoaded else { return }
-            imageView.image = image
+            guard isViewLoaded, let image else { return }
+            rescaleAndCenterImageInScrollView(image: image)
+            imageView.frame.size = image.size
+            
         }
     }
-
+    
+    @IBOutlet var scrollView: UIScrollView!
+    
     @IBOutlet var backButton: UIButton!
     @IBOutlet private var imageView: UIImageView!
-
+    
     override func viewDidLoad() {
+        
+        
         super.viewDidLoad()
         imageView.image = image
-        
-        
+        rescaleAndCenterImageInScrollView(image: image!)
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
     }
     
-    @IBAction private func didTapBackButton(_ sender: UIButton) {
+    @IBAction func didTapBackButton() {
         dismiss(animated: true, completion: nil)
+        print("Нажата кнопка назад")
     }
     
+    
+    //@IBAction private func didTapBackButton(_ sender: UIButton) {
+      //  dismiss(animated: true, completion: nil)
+   //}
+    private func rescaleAndCenterImageInScrollView(image: UIImage) {
+        let minZoomScale = scrollView.minimumZoomScale
+        let maxZoomScale = scrollView.maximumZoomScale
+        view.layoutIfNeeded()
+        let visibleRectSize = scrollView.bounds.size
+        let imageSize = image.size
+        let hScale = visibleRectSize.width / imageSize.width
+        let vScale = visibleRectSize.height / imageSize.height
+        let scale = min(maxZoomScale, max(minZoomScale, min(hScale, vScale)))
+        scrollView.setZoomScale(scale, animated: false)
+    }
 }
+
+extension SingleImageViewController: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+}
+
