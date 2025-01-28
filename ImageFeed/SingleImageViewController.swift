@@ -31,7 +31,7 @@ final class SingleImageViewController: UIViewController {
         scrollView.delegate = self
         scrollView.minimumZoomScale = 0.1
         scrollView.maximumZoomScale = 1.25
-
+        
         guard let image else { return }
         imageView.image = image
         imageView.frame.size = image.size
@@ -89,4 +89,3 @@ extension SingleImageViewController: UIScrollViewDelegate {
         centerImageView()
     }
 }
-

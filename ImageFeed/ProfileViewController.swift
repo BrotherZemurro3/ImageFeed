@@ -11,7 +11,7 @@ import Foundation
 
 
 final class ProfileViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let profileImage = UIImage(named: "profile_photo")
@@ -21,7 +21,7 @@ final class ProfileViewController: UIViewController {
         view.addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-        imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 32),
             imageView.widthAnchor.constraint(equalToConstant: 70),
             imageView.heightAnchor.constraint(equalToConstant: 70),])
         
@@ -32,14 +32,14 @@ final class ProfileViewController: UIViewController {
         view.addSubview(logoutButton)
         NSLayoutConstraint.activate([
             logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
-        logoutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor) ])
-            
+            logoutButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor) ])
+        
         
         let nameLabel = UILabel()
         nameLabel.text = "Екатерина Новикова"
         nameLabel.textColor = .ypWhite
         nameLabel.font = .systemFont(ofSize: 23, weight: .bold)
-
+        
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(nameLabel)
         NSLayoutConstraint.activate([
@@ -65,5 +65,3 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 8)])
     }
 }
-
-    
