@@ -15,6 +15,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let profileImage = UIImage(named: "profile_photo")
+        
         let imageView = UIImageView(image: profileImage)
         imageView.tintColor = .gray
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -37,7 +38,7 @@ final class ProfileViewController: UIViewController {
         
         let nameLabel = UILabel()
         nameLabel.text = "Екатерина Новикова"
-        nameLabel.textColor = .ypWhite
+        nameLabel.textColor = .white
         nameLabel.font = .systemFont(ofSize: 23, weight: .bold)
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +48,7 @@ final class ProfileViewController: UIViewController {
             nameLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8)])
         let loginLabel = UILabel()
         loginLabel.text = "@ekaterina_nov"
-        loginLabel.textColor = .ypGray
+        loginLabel.textColor = .lightGray
         loginLabel.font = .systemFont(ofSize: 13,weight: .regular)
         loginLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(loginLabel)
@@ -56,7 +57,7 @@ final class ProfileViewController: UIViewController {
             loginLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 8)])
         let descriptionLabel = UILabel()
         descriptionLabel.text = "Hello,world!"
-        descriptionLabel.textColor = .ypWhite
+        descriptionLabel.textColor = .white
         descriptionLabel.font = .systemFont(ofSize: 13, weight: .regular)
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(descriptionLabel)
