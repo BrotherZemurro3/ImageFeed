@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A7C419A2D55A7AE0055253E /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C41992D55A7A30055253E /* OAuth2Service.swift */; };
 		3AC801342D5127B000867A22 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC801332D5127A100867A22 /* AuthViewController.swift */; };
 		3AC801372D51520300867A22 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC801362D5151F400867A22 /* WebViewViewController.swift */; };
 		3AF8132C2D52125200A8CBCE /* WebViewControllerDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF8132B2D52124300A8CBCE /* WebViewControllerDelegateProtocol.swift */; };
@@ -33,6 +34,7 @@
 		3A4DAFB42D17028E00ECACBA /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DAFCE2D17029200ECACBA /* ImageFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DAFD82D17029200ECACBA /* ImageFeedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A7C41992D55A7A30055253E /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		3AC801332D5127A100867A22 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		3AC801362D5151F400867A22 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		3AF8132B2D52124300A8CBCE /* WebViewControllerDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewControllerDelegateProtocol.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		3AC801352D514F5F00867A22 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				3A7C41992D55A7A30055253E /* OAuth2Service.swift */,
 				3AF8132B2D52124300A8CBCE /* WebViewControllerDelegateProtocol.swift */,
 				3AC801362D5151F400867A22 /* WebViewViewController.swift */,
 				3AC801332D5127A100867A22 /* AuthViewController.swift */,
@@ -278,6 +281,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AF8132C2D52125200A8CBCE /* WebViewControllerDelegateProtocol.swift in Sources */,
+				3A7C419A2D55A7AE0055253E /* OAuth2Service.swift in Sources */,
 				3AC801372D51520300867A22 /* WebViewViewController.swift in Sources */,
 				3AC801342D5127B000867A22 /* AuthViewController.swift in Sources */,
 			);

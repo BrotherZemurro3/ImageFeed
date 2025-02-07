@@ -5,7 +5,7 @@ import Foundation
 
 final class AuthViewController:  UIViewController {
  private let showWebViewSegueIdentifier = "ShowWebView"
-    
+    private let oauth2Serice = OAuth2Service.shared
     
     
     override func viewDidLoad() {
