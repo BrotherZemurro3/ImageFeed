@@ -71,7 +71,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2bl-y9-1hS">
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2bl-y9-1hS" customClass="WKWebVView">
                                 <rect key="frame" x="0.0" y="103" width="393" height="715"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
@@ -98,7 +98,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="n0D-iw-Z5c"/>
                     <connections>
-                        <outlet property="WKWebView" destination="2bl-y9-1hS" id="6Cd-dr-Zcn"/>
+                        <outlet property="WKWebView" destination="2bl-y9-1hS" id="xz9-oY-sub"/>
                         <outlet property="progressView" destination="UFD-xO-i2y" id="kmB-MQ-43Q"/>
                     </connections>
                 </viewController>

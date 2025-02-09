@@ -1,12 +1,12 @@
 import UIKit
 import Foundation
-import WebKit
+@preconcurrency import WebKit
 
 
 final class WebViewViewController: UIViewController {
     
     
-    @IBOutlet  var WKWebView: WKWebView!
+@IBOutlet  var WKWebView: WKWebView!
     
     @IBOutlet  var progressView: UIProgressView!
     
@@ -15,7 +15,7 @@ final class WebViewViewController: UIViewController {
         super.viewDidLoad()
         loadAuthView()
         WKWebView.navigationDelegate = self
-        updateProgress()
+        
         
         
     }
@@ -45,7 +45,8 @@ final class WebViewViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-     
+        // NOTE: Since the class is marked as `final` we don't need to pass a context.
+        // In case of inhertiance context must not be nil.
         WKWebView.addObserver(
             self,
             forKeyPath: #keyPath(WKWebView.estimatedProgress),
@@ -64,7 +65,6 @@ final class WebViewViewController: UIViewController {
             updateProgress()
         } else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-            
         }
     }
 
@@ -72,31 +72,25 @@ final class WebViewViewController: UIViewController {
         progressView.progress = Float(WKWebView.estimatedProgress)
         progressView.isHidden = fabs(WKWebView.estimatedProgress - 1.0) <= 0.0001
     }
-    
- 
 }
 
-
 extension WebViewViewController: WKNavigationDelegate {
-    
     func webView(
         _ webView: WKWebView,
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-        if let code = code(from: navigationAction) { //1
-            delegate?.webViewViewController(self, didAuthenticateWithCode: code)                //2
+        if let code = code(from: navigationAction) {
+            delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
-            
         } else {
-            decisionHandler(.allow) //4
+            decisionHandler(.allow)
         }
     }
-   
-    
+
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if
-            let url = navigationAction.request.url,                         
+            let url = navigationAction.request.url,
             let urlComponents = URLComponents(string: url.absoluteString),
             urlComponents.path == "/oauth/authorize/native",
             let items = urlComponents.queryItems,
@@ -107,5 +101,4 @@ extension WebViewViewController: WKNavigationDelegate {
             return nil
         }
     }
-    
 }
