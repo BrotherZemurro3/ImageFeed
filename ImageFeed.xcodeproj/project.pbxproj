@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A5DA7292D5A17FC006971F5 /* NetworkRouting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5DA7282D5A17EE006971F5 /* NetworkRouting.swift */; };
+		3A5DA72B2D5A1D39006971F5 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5DA72A2D5A1D2E006971F5 /* NetworkClient.swift */; };
+		3A5DA72D2D5A7EB1006971F5 /* OAuthTokenResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5DA72C2D5A7E9E006971F5 /* OAuthTokenResponseBody.swift */; };
+		3A5DA72F2D5A8036006971F5 /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5DA72E2D5A8024006971F5 /* OAuth2TokenStorage.swift */; };
 		3A7C419A2D55A7AE0055253E /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C41992D55A7A30055253E /* OAuth2Service.swift */; };
 		3AC801342D5127B000867A22 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC801332D5127A100867A22 /* AuthViewController.swift */; };
 		3AC801372D51520300867A22 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC801362D5151F400867A22 /* WebViewViewController.swift */; };
@@ -34,6 +38,10 @@
 		3A4DAFB42D17028E00ECACBA /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DAFCE2D17029200ECACBA /* ImageFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DAFD82D17029200ECACBA /* ImageFeedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A5DA7282D5A17EE006971F5 /* NetworkRouting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkRouting.swift; sourceTree = "<group>"; };
+		3A5DA72A2D5A1D2E006971F5 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		3A5DA72C2D5A7E9E006971F5 /* OAuthTokenResponseBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuthTokenResponseBody.swift; sourceTree = "<group>"; };
+		3A5DA72E2D5A8024006971F5 /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
 		3A7C41992D55A7A30055253E /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		3AC801332D5127A100867A22 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		3AC801362D5151F400867A22 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
@@ -45,7 +53,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				Untitled.swift,
 			);
 			target = 3A4DAFB32D17028E00ECACBA /* ImageFeed */;
 		};
@@ -127,6 +134,10 @@
 		3AC801352D514F5F00867A22 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				3A5DA72E2D5A8024006971F5 /* OAuth2TokenStorage.swift */,
+				3A5DA72C2D5A7E9E006971F5 /* OAuthTokenResponseBody.swift */,
+				3A5DA72A2D5A1D2E006971F5 /* NetworkClient.swift */,
+				3A5DA7282D5A17EE006971F5 /* NetworkRouting.swift */,
 				3A7C41992D55A7A30055253E /* OAuth2Service.swift */,
 				3AF8132B2D52124300A8CBCE /* WebViewControllerDelegateProtocol.swift */,
 				3AC801362D5151F400867A22 /* WebViewViewController.swift */,
@@ -283,7 +294,11 @@
 				3AF8132C2D52125200A8CBCE /* WebViewControllerDelegateProtocol.swift in Sources */,
 				3A7C419A2D55A7AE0055253E /* OAuth2Service.swift in Sources */,
 				3AC801372D51520300867A22 /* WebViewViewController.swift in Sources */,
+				3A5DA72B2D5A1D39006971F5 /* NetworkClient.swift in Sources */,
+				3A5DA72F2D5A8036006971F5 /* OAuth2TokenStorage.swift in Sources */,
+				3A5DA7292D5A17FC006971F5 /* NetworkRouting.swift in Sources */,
 				3AC801342D5127B000867A22 /* AuthViewController.swift in Sources */,
+				3A5DA72D2D5A7EB1006971F5 /* OAuthTokenResponseBody.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
