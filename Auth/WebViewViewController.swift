@@ -15,6 +15,7 @@ final class WebViewViewController: UIViewController {
 @IBOutlet  var progressView: UIProgressView!
     
     weak var delegate: WebViewViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -34,10 +35,13 @@ final class WebViewViewController: UIViewController {
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: Constants.accessScope)
+            
         ]
+        
         guard let url = urlComponents.url else {
             return
         }
+        print("Запрашиваем авторизацию по URL: \(url.absoluteString)")
         let request = URLRequest(url: url)
         webView.load(request)
       
@@ -87,6 +91,14 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         if let code = code(from: navigationAction) {
+            print("Код авторизации получен: \(code)")
+            
+            if delegate == nil {
+                print("⚠️ delegate равен nil!")
+            } else {
+                print("✅ delegate установлен")
+            }
+            
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {
@@ -95,6 +107,10 @@ extension WebViewViewController: WKNavigationDelegate {
     }
 
     private func code(from navigationAction: WKNavigationAction) -> String? {
+        if let url = navigationAction.request.url {
+            
+        }
+        
         if
             let url = navigationAction.request.url,
             let urlComponents = URLComponents(string: url.absoluteString),
@@ -102,8 +118,10 @@ extension WebViewViewController: WKNavigationDelegate {
             let items = urlComponents.queryItems,
             let codeItem = items.first(where: { $0.name == "code" })
         {
+            print("Код авторизации найден: \(codeItem.value ?? "nil")")
             return codeItem.value
         } else {
+            print("Код авторизации не найден")
             return nil
         }
     }

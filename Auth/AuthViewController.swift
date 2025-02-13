@@ -7,10 +7,11 @@ protocol AuthViewControllerDelegate: AnyObject {
 }
 
 final class AuthViewController: UIViewController {
-    private let showWebViewSegueIdentifier = "ShowWebView"
+    private let showWebViewSegueIdentifier = "showWebView"
     private let oauth2Service = OAuth2Service.shared
     
     // Свойство делегата
+    
     weak var delegate: AuthViewControllerDelegate?
     
     override func viewDidLoad() {
@@ -20,13 +21,20 @@ final class AuthViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
-            guard
-                let webViewViewController = segue.destination as? WebViewViewController
-            else {
-                assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
+            print("✅ Переход на WebViewViewController")
+
+            guard let webViewViewController = segue.destination as? WebViewViewController else {
+                assertionFailure("❌ Ошибка: не удалось привести segue.destination к WebViewViewController")
                 return
             }
+
             webViewViewController.delegate = self
+
+            if webViewViewController.delegate == nil {
+                print("⚠️ delegate не установлен в prepare(for:sender:)!")
+            } else {
+                print("✅ delegate успешно установлен в prepare(for:sender:)")
+            }
         } else {
             super.prepare(for: segue, sender: sender)
         }
@@ -44,16 +52,22 @@ final class AuthViewController: UIViewController {
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         // Вызываем fetchOAuthToken для получения токена
+        print("Отправляем запрос на получение токена с кодом: \(code)")
         oauth2Service.fetchAuthToken(code: code) { [weak self] result in
             guard let self = self else { return }
-            
+
             DispatchQueue.main.async {
                 switch result {
                 case .success(let token):
                     print("Токен получен: \(token)")
-                    // Уведомляем делегата об успешной аутентификации
                     vc.dismiss(animated: true) {
                         self.delegate?.didAuthenticate(self)
+                        if self.delegate == nil {
+                            print("⚠️ delegate в AuthViewController равен nil!")
+                        } else {
+                            print("✅ delegate вызван, переходим дальше")
+                            self.delegate?.didAuthenticate(self)
+                        }
                     }
                 case .failure(let error):
                     print("Ошибка авторизации: \(error.localizedDescription)")
@@ -65,7 +79,9 @@ extension AuthViewController: WebViewViewControllerDelegate {
 
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         print("Отмена аутентификации пользователем")
+        print("Закрываем WebView и передаём управление")
         vc.dismiss(animated: true)
+        self.delegate?.didAuthenticate(self)
     }
     
     // Метод для показа ошибки авторизации

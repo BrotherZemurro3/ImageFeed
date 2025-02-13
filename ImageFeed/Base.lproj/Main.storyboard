@@ -99,7 +99,7 @@
                     <navigationItem key="navigationItem" id="n0D-iw-Z5c"/>
                     <connections>
                         <outlet property="progressView" destination="UFD-xO-i2y" id="kmB-MQ-43Q"/>
-                        <outlet property="webView" destination="2bl-y9-1hS" id="EmI-ie-Jeq"/>
+                        <outlet property="webView" destination="2bl-y9-1hS" id="x9j-zg-3mL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="t3Z-gJ-kj2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
