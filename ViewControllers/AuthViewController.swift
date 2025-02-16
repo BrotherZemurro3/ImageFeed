@@ -8,9 +8,12 @@ final class AuthViewController: UIViewController {
     private let showWebViewSegueIdentifier = "showWebView"
     private let oauth2Service = OAuth2Service.shared
     
+    @IBOutlet weak var entryButton: UIButton!
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        entryButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         
         print("🟢 Создан экземпляр AuthViewController: \(self)")
         if delegate == nil {
