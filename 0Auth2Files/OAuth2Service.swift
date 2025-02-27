@@ -7,6 +7,10 @@ final class OAuth2Service {
     static let shared = OAuth2Service()
     private let baseURL = "https://unsplash.com/oauth/token"
     private let storage = OAuth2TokenStorage()
+    private let urlSession = URLSession.shared
+    private var task: URLSessionTask?
+    private var lastCode: String?
+
     private init() {}
     
     
@@ -15,7 +19,8 @@ final class OAuth2Service {
     func makeOAuthTokenRequest(code: String) -> URLRequest? {
         // Объявляю базовый URL, который состоит из схемы и имени
         guard let baseURL = URL(string: "https://unsplash.com") else {
-            fatalError("Invalid base URL")
+            assertionFailure("Invalid base URL")
+            return nil
         }
         
         // Полученние конечного URL , собранного из базового URL, пути и параметров запроса (констант)
@@ -53,19 +58,33 @@ final class OAuth2Service {
     }
     
         // MARK: - Извлечение токена
-    func fetchAuthToken(code: String, completion: @escaping (Result<String, OAuthError>) -> Void) {
-        guard let request = makeOAuthTokenRequest(code: code) else {
-            completion(.failure(.invalidRequest))
-            print("❌ Ошибка: Неверный запрос на получение токена")
-            return
-        }
+    func fetchAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+          assert(Thread.isMainThread)                         // 4
+          if task != nil {                                    // 5
+              if lastCode != code {                           // 6
+                  task?.cancel()                              // 7
+              } else {
+                  completion(.failure(OAuthError.invalidRequest))
+                  return                                      // 8
+              }
+          } else {
+              if lastCode == code {                           // 9
+                  completion(.failure(OAuthError.invalidRequest))
+                  return
+              }
+          }
+          lastCode = code                                     // 10
+          guard
+              let request = makeOAuthTokenRequest(code: code)           // 11
+          else {
+              completion(.failure(OAuthError.invalidRequest))
+              return
+          }
         
-        print("📤 Отправка запроса: \(request)")
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in guard let self = self else { return }
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(.failure(.networkError(error)))
+                    completion(.failure(OAuthError.networkError(error)))
                     print("❌ Ошибка сети:", error.localizedDescription)
                 }
                 return
@@ -73,7 +92,7 @@ final class OAuth2Service {
             
             guard let httpResponse = response as? HTTPURLResponse else {
                 DispatchQueue.main.async {
-                    completion(.failure(.invalidHTTPResponse))
+                    completion(.failure(OAuthError.invalidHTTPResponse))
                     print("❌ Ошибка: Некорректный HTTP-ответ")
                 }
                 return
@@ -83,7 +102,7 @@ final class OAuth2Service {
             
             guard (200..<300).contains(httpResponse.statusCode) else {
                 DispatchQueue.main.async {
-                    completion(.failure(.invalidStatusCode(httpResponse.statusCode)))
+                    completion(.failure(OAuthError.invalidStatusCode(httpResponse.statusCode)))
                     print("❌ Ошибка: Недопустимый статус-код \(httpResponse.statusCode)")
                 }
                 return
@@ -91,7 +110,7 @@ final class OAuth2Service {
             
             guard let data = data else {
                 DispatchQueue.main.async {
-                    completion(.failure(.invalidData))
+                    completion(.failure(OAuthError.invalidData))
                     print("❌ Ошибка: Данные от сервера отсутствуют")
                 }
                 return
@@ -118,11 +137,14 @@ final class OAuth2Service {
                 }
             } catch {
                 DispatchQueue.main.async {
-                    completion(.failure(.decodingFailed(error)))
+                    completion(.failure(OAuthError.decodingFailed(error)))
                     print("❌ Ошибка декодирования JSON:", error.localizedDescription)
                 }
+                self.task = nil
+                self.lastCode = nil
             }
         }
+        self.task = task
         task.resume()
     }
     
