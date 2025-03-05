@@ -15,18 +15,22 @@ final class WebViewViewController: UIViewController {
     @IBOutlet  var progressView: UIProgressView!
     @IBOutlet weak var backButton: UIButton!
     
-    
+    private var estimatedProgressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        webView.navigationDelegate = self
-        loadAuthView()
-        
-        
-    }
+            super.viewDidLoad()
+            
+            estimatedProgressObservation = webView.observe(
+                \.estimatedProgress,
+                options: [],
+                changeHandler: { [weak self] _, _ in
+                    guard let self = self else { return }
+                    self.updateProgress()
+                })
+        }
+    
     // MARK: - Actions
     
     @IBAction func backButtonTapped(_ sender: Any) {

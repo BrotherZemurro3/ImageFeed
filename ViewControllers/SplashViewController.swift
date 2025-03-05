@@ -3,6 +3,7 @@ final class SplashViewController: UIViewController {
    
     private let storage = OAuth2TokenStorage()
     private let showAuthenticationScreenSegueIdentifier = "showAuthenticationScreen"
+    private let profileService = ProfileService.shared
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -54,6 +55,35 @@ extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true) { [weak self] in
             self?.switchTabBarController()
+            
+            guard let token = self?.storage.token else {
+                return
+            }
+            self?.fetchProfile(token:token)
         }
     }
+    private func fetchProfile(token: String) {
+        UIBlockingProgressHUD.show()
+        ProfileService.shared.fetchProfile(token: token) { [weak self] (result: Result <Profile, Error>) in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let profile):
+                ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { imageResult in
+                    switch imageResult {
+                    case .success(let avatarURL):
+                        print("Аватарка успешно загружена: \(avatarURL)")
+                    case .failure(let error):
+                        print("Ошибка загрузки аватарки: \(error.localizedDescription)")
+                    }
+                }
+                self.switchTabBarController()
+                
+            case .failure(let fetchError):
+                print("Не удалось получить данные профиля: \(fetchError.localizedDescription)")
+            }
+        }
+    }
+
 }
