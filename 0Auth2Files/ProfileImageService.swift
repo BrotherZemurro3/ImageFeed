@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-struct UserResult: Codable {
+struct UserResult: Codable { // ✅ Исправлено имя структуры (userResult -> UserResult) - занести в конспект
     struct ProfileImages: Codable {
         let small: String
     }
@@ -16,7 +16,7 @@ final class ProfileImageService {
     static let shared = ProfileImageService()
     private init() {}
     
-    private(set) var avatarURL: String?
+    private(set) var avatarURL: String?  // Убедись, что URL правильно сохраняется
     private var currentTask: URLSessionTask?
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
@@ -42,27 +42,19 @@ final class ProfileImageService {
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             switch result {
-            case .success(let data):
-                do {
-                    let userResult = try JSONDecoder().decode(UserResult.self, from: data)
-                    let avatarURL = userResult.profileImage.small
-                    self?.avatarURL = avatarURL
-                    
-                    DispatchQueue.main.async {
-                        completion(.success(avatarURL))
-                        NotificationCenter.default.post(
-                            name: ProfileImageService.didChangeNotification,
-                            object: self,
-                            userInfo: ["URL": avatarURL]
-                        )
-                    }
-                } catch {
-                    print("[fetchProfileImageURL]: Ошибка декодирования - \(error.localizedDescription)")
-                    completion(.failure(error))
+            case .success(let userResult):
+                let avatarURL = userResult.profileImage.small
+                self?.avatarURL = avatarURL  // Убедись, что avatarURL сохраняется
+                DispatchQueue.main.async {
+                    completion(.success(avatarURL))
+                    NotificationCenter.default.post(
+                        name: ProfileImageService.didChangeNotification,
+                        object: self,
+                        userInfo: ["URL": avatarURL]
+                    )
                 }
-            
             case .failure(let error):
                 print("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription)")
                 completion(.failure(error))

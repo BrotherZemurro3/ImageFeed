@@ -59,27 +59,31 @@ final class OAuth2Service {
     
         // MARK: - Извлечение токена
     func fetchAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        print("🚀 fetchAuthToken вызван с кодом: \(code)")
           assert(Thread.isMainThread)                         // 4
-          if task != nil {                                    // 5
-              if lastCode != code {                           // 6
-                  task?.cancel()                              // 7
-              } else {
-                  completion(.failure(OAuthError.invalidRequest))
-                  return                                      // 8
-              }
-          } else {
-              if lastCode == code {                           // 9
-                  completion(.failure(OAuthError.invalidRequest))
-                  return
-              }
-          }
+        if task != nil {
+            if lastCode != code {
+                print("❌ Код не совпадает, отменяем задачу")
+                task?.cancel()
+            } else {
+                print("❌ Код совпадает, прерываем выполнение")
+                completion(.failure(OAuthError.invalidRequest))
+                return
+            }
+        } else {
+            if lastCode == code {
+                print("❌ Последний код совпадает, прерываем выполнение")
+                completion(.failure(OAuthError.invalidRequest))
+                return
+            }
+        }
           lastCode = code                                     // 10
-          guard
-              let request = makeOAuthTokenRequest(code: code)           // 11
-          else {
-              completion(.failure(OAuthError.invalidRequest))
-              return
-          }
+        guard let request = makeOAuthTokenRequest(code: code) else {
+            print("❌ Ошибка: makeOAuthTokenRequest вернул nil")
+            completion(.failure(OAuthError.invalidRequest))
+            return
+        }
+        print("📡 Создан запрос: \(request)")
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in guard let self = self else { return }
             if let error = error {
@@ -145,6 +149,12 @@ final class OAuth2Service {
             }
         }
         self.task = task
+        print("🚀 Отправка запроса на токен: \(request)")
+        print("🔍 Заголовки запроса: \(request.allHTTPHeaderFields ?? [:])")
+        if let body = request.httpBody, let jsonString = String(data: body, encoding: .utf8) {
+            print("📦 Тело запроса: \(jsonString)")
+        }
+        
         task.resume()
     }
     

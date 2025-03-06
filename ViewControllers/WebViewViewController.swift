@@ -21,7 +21,7 @@ final class WebViewViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
             super.viewDidLoad()
-            
+        webView.navigationDelegate = self
             estimatedProgressObservation = webView.observe(
                 \.estimatedProgress,
                 options: [],
@@ -29,6 +29,7 @@ final class WebViewViewController: UIViewController {
                     guard let self = self else { return }
                     self.updateProgress()
                 })
+        loadAuthView()
         }
     
     // MARK: - Actions
@@ -128,11 +129,13 @@ extension WebViewViewController: WKNavigationDelegate {
         
         if
             let url = navigationAction.request.url,
+            
             let urlComponents = URLComponents(string: url.absoluteString),
             urlComponents.path == "/oauth/authorize/native",
             let items = urlComponents.queryItems,
             let codeItem = items.first(where: { $0.name == "code" })
         {
+            print("Перенаправление на URL: \(url.absoluteString)")
             print("Код авторизации найден: \(codeItem.value ?? "nil")")
             return codeItem.value
         } else {

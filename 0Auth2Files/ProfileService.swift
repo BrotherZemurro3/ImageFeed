@@ -7,6 +7,7 @@ struct ProfileResult: Codable {
     let firstName: String?
     let lastName: String?
     let bio: String?
+  
     
     enum CodingKeys: String, CodingKey {
         case username
@@ -69,26 +70,18 @@ final class ProfileService {
             return
         }
         
-        let task = URLSession.shared.data(for: request) { [weak self] result in
+        let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             switch result {
-            case .success(let data):
-                print("[fetchProfile]: Данные получены: \(String(data: data, encoding: .utf8) ?? "Невозможно декодировать")")
-                do {
-                    let profileResult = try JSONDecoder().decode(ProfileResult.self, from: data)
-                    let profile = Profile(profileResult: profileResult)
-                    self?.profile = profile
-                    completion(.success(profile))
-                } catch {
-                    print("[fetchProfile]: Ошибка декодирования - \(error.localizedDescription)")
-                    completion(.failure(error))
-                }
-            
+            case .success(let profileResult):
+                print("[fetchProfile]: Данные успешно декодированы: \(profileResult)")
+                let profile = Profile(profileResult: profileResult)
+                self?.profile = profile
+                completion(.success(profile))
             case .failure(let error):
-                print("[fetchProfile]: NetworkError -  \(error.localizedDescription)")
+                print("[fetchProfile]: Ошибка декодирования - \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
-        
         self.currentTask = task
         task.resume()
     }
