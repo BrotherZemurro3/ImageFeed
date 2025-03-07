@@ -4,7 +4,7 @@ import ProgressHUD
 
 final class AuthViewController: UIViewController {
     
- 
+    
     weak var delegate: AuthViewControllerDelegate?
     private let showWebViewSegueIdentifier = "showWebView"
     private let oauth2Service = OAuth2Service.shared
@@ -16,35 +16,35 @@ final class AuthViewController: UIViewController {
         super.viewDidLoad()
         entryButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         
-        print("🟢 Создан экземпляр AuthViewController: \(self)")
+        print("[AuthViewController|viewDidLoad]: Создан экземпляр AuthViewController: \(self)")
         if delegate == nil {
-            print("⚠️ delegate в AuthViewController равен nil после возврата из WebView!")
+            print("[AuthViewController|viewDidLoad]: delegate в AuthViewController равен nil после возврата из WebView!")
         } else {
-            print("✅ delegate в AuthViewController НЕ потерялся после WebView!")
+            print("[AuthViewController|viewDidLoad]: delegate в AuthViewController НЕ потерялся после WebView!")
         }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("✅ Появился AuthViewController: \(self), delegate: \(String(describing: delegate))")
+        print("[AuthViewController|viewDidAppear]: Появился AuthViewController: \(self), delegate: \(String(describing: delegate))")
     }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
-            print("✅ Переход на WebViewViewController")
+            print("[AuthViewController|prepare]: Переход на WebViewViewController")
             
             guard let webViewViewController = segue.destination as? WebViewViewController else {
-                assertionFailure("❌ Ошибка: не удалось привести segue.destination к WebViewViewController")
+                assertionFailure("[AuthViewController|prepare]: Ошибка: не удалось привести segue.destination к WebViewViewController")
                 return
             }
             
             webViewViewController.delegate = self
             
             if webViewViewController.delegate == nil {
-                print("⚠️ delegate не установлен в prepare(for:sender:)!")
+                print("[AuthViewController|prepare]: delegate не установлен в prepare(for:sender:)!")
             } else {
-                print("✅ delegate успешно установлен в prepare(for:sender:)")
+                print("[AuthViewController|prepare]: delegate успешно установлен в prepare(for:sender:)")
             }
         } else {
             super.prepare(for: segue, sender: sender)
@@ -56,7 +56,7 @@ final class AuthViewController: UIViewController {
 // MARK: - Реализация делегата WebViewViewControllerDelegate
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        print("🟡 WebView завершает работу, код: \(code)")
+        print("[extension AuthViewController|WebViewViewControllerDelegate]: WebView завершает работу, код: \(code)")
         
         UIBlockingProgressHUD.show()
         oauth2Service.fetchAuthToken(code) { [weak self] result in
@@ -65,25 +65,25 @@ extension AuthViewController: WebViewViewControllerDelegate {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let token):
-                    print("✅ Токен получен: \(token)")
+                    print("[extension AuthViewController|WebViewViewControllerDelegate]: Токен получен: \(token)")
                     
                     if let navController = self.navigationController {
-                        print("🔄 Используем popViewController")
+                        print("[extension AuthViewController|WebViewViewControllerDelegate]: Используем popViewController")
                         navController.popViewController(animated: true)
                     } else {
-                        print("🔄 Используем dismiss")
+                        print("[extension AuthViewController|WebViewViewControllerDelegate]: Используем dismiss")
                         vc.dismiss(animated: true)
                     }
                     
                     if self.delegate == nil {
-                        print("⚠️ delegate в AuthViewController равен nil!")
+                        print("[extension AuthViewController| WebViewViewControllerDelegate]: delegate в AuthViewController равен nil!")
                     } else {
-                        print("✅ delegate вызван, переходим дальше")
+                        print("[extension AuthViewController| WebViewViewControllerDelegate]: delegate вызван, переходим дальше")
                         self.delegate?.didAuthenticate(self)
                     }
                     
                 case .failure(let error):
-                    print("❌ Ошибка авторизации: \(error.localizedDescription)")
+                    print("[extension AuthViewController|WebViewViewControllerDelegate]: Ошибка авторизации: \(error.localizedDescription)")
                     self.showAuthErrorAlert()
                 }
             }
@@ -91,8 +91,8 @@ extension AuthViewController: WebViewViewControllerDelegate {
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
-        print("Отмена аутентификации пользователем")
-        print("Закрываем WebView и передаём управление")
+        print("[extension AuthViewController|webViewViewControllerDidCancel]: Отмена аутентификации пользователем")
+        print("[extension AuthViewController|webViewViewControllerDidCancel]: Закрываем WebView и передаём управление")
         vc.dismiss(animated: true)
         self.delegate?.didAuthenticate(self)
     }

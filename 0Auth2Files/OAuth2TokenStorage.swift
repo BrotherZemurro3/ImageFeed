@@ -4,7 +4,7 @@ import SwiftKeychainWrapper
 
 // MARK: - Сохранение токена (Bearer Token) в User Defaults 
 final class OAuth2TokenStorage {
-
+    
     private let key = "AuthToken"
     private let userDefaults = UserDefaults.standard
     

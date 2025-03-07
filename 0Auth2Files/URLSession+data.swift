@@ -27,19 +27,19 @@ extension URLSession {
             }
             
             if let error = error {
-                print("[objectTask]: URLRequestError - \(error.localizedDescription)")
+                print("[URLSession|objectTask]: URLRequestError - \(error.localizedDescription)")
                 fulfillCompletionOnMainThread(.failure(NetworkError.urlRequestError(error)))
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                print("[objectTask]: NetworkError - отсутствие HTTP-ответа")
+                print("[URLSession|objectTask]: NetworkError - отсутствие HTTP-ответа")
                 fulfillCompletionOnMainThread(.failure(NetworkError.invalidResponse))
                 return
             }
             
             guard (200...299).contains(httpResponse.statusCode), let data = data else {
-                print("[objectTask]: HTTPStatusCodeError - Код: \(httpResponse.statusCode), Данные: \(String(data: data ?? Data(), encoding: .utf8) ?? "Нет данных")")
+                print("[URLSession|objectTask]: HTTPStatusCodeError - Код: \(httpResponse.statusCode), Данные: \(String(data: data ?? Data(), encoding: .utf8) ?? "Нет данных")")
                 fulfillCompletionOnMainThread(.failure(NetworkError.httpStatusCode(httpResponse.statusCode)))
                 return
             }
@@ -48,7 +48,7 @@ extension URLSession {
                 let decodedObject = try decoder.decode(T.self, from: data)
                 fulfillCompletionOnMainThread(.success(decodedObject))
             } catch {
-                print("[objectTask]: DecodingError - \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "Нет данных")")
+                print("[URLSession|objectTask]: DecodingError - \(error.localizedDescription), Данные: \(String(data: data, encoding: .utf8) ?? "Нет данных")")
                 fulfillCompletionOnMainThread(.failure(error))
             }
         }

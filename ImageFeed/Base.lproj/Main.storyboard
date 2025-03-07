@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Vbc-5i-llQ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -13,13 +13,13 @@
         <!--AuthViewController-->
         <scene sceneID="0RF-VR-Kvh">
             <objects>
-                <viewController title="AuthViewController" id="29q-GT-Z4A" customClass="AuthViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AuthViewController" title="AuthViewController" id="29q-GT-Z4A" customClass="AuthViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J9C-6u-kzh">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="auth_screen_logo" translatesAutoresizingMaskIntoConstraints="NO" id="Mqs-J1-Xol">
-                                <rect key="frame" x="166.66666666666666" y="418" width="60" height="60"/>
+                                <rect key="frame" x="166.66666666666666" y="430.66666666666669" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="3u6-gM-4MQ"/>
                                     <constraint firstAttribute="height" constant="60" id="Y3Q-vf-bbu"/>
@@ -322,33 +322,6 @@
             </objects>
             <point key="canvasLocation" x="-77" y="430"/>
         </scene>
-        <!--SplashViewController-->
-        <scene sceneID="Iqz-1S-NfE">
-            <objects>
-                <viewController title="SplashViewController" id="Vbc-5i-llQ" customClass="SplashViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="kfN-5O-hlF">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Vector" translatesAutoresizingMaskIntoConstraints="NO" id="qOt-or-ufz">
-                                <rect key="frame" x="160" y="389" width="73" height="75"/>
-                            </imageView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="gOX-25-t7D"/>
-                        <color key="backgroundColor" name="YP Black"/>
-                        <constraints>
-                            <constraint firstItem="qOt-or-ufz" firstAttribute="centerY" secondItem="kfN-5O-hlF" secondAttribute="centerY" id="TMh-l6-qld"/>
-                            <constraint firstItem="qOt-or-ufz" firstAttribute="centerX" secondItem="kfN-5O-hlF" secondAttribute="centerX" id="sxH-BM-fq7"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <segue destination="pf5-x9-eIh" kind="presentation" identifier="showAuthenticationScreen" modalPresentationStyle="fullScreen" id="V79-ic-3Xt"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="zYS-Lf-dhR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-3668" y="39"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="q2t-r2-7Kg">
             <objects>
@@ -356,7 +329,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="OEc-Jn-0Mn"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="25y-TB-0ub">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -374,7 +347,6 @@
         <image name="Active" width="31" height="30"/>
         <image name="Backward" width="24" height="24"/>
         <image name="Sharing" width="50" height="50"/>
-        <image name="Vector" width="75" height="78"/>
         <image name="auth_screen_logo" width="60" height="60"/>
         <image name="like_button_on" width="42" height="42"/>
         <image name="nav_back_button" width="9" height="16"/>

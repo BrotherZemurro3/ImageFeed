@@ -7,7 +7,7 @@ struct ProfileResult: Codable {
     let firstName: String?
     let lastName: String?
     let bio: String?
-  
+    
     
     enum CodingKeys: String, CodingKey {
         case username
@@ -46,7 +46,7 @@ final class ProfileService {
     private(set) var profile: Profile?
     
     func createAuthRequest(url: URL, token: String) -> URLRequest? {
-        print("[createAuthRequest]: Создаём запрос с токеном: \(token)")
+        print("[ProfileService|createAuthRequest]: Создаём запрос с токеном: \(token)")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -55,17 +55,17 @@ final class ProfileService {
     
     func fetchProfile(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         currentTask?.cancel()
-        print("[fetchProfile]: Отправка запроса...")
+        print("[ProfileService|fetchProfile]: Отправка запроса...")
         
         guard let url = URL(string: "https://api.unsplash.com/me") else {
-            print("[fetchProfile]: Ошибка интернет соединения - не создаётся URL")
+            print("[ProfileService|fetchProfile]: Ошибка интернет соединения - не создаётся URL")
             completion(.failure(ProfileNetworkError.urlSessionError))
             return
         }
         
         print("URL successfully created: \(url)")
         guard let request = createAuthRequest(url: url, token: token) else {
-            print("[fetchProfile]: Ошибка интернет соединения - не создаётся URLRequest")
+            print("[ProfileService|fetchProfile]: Ошибка интернет соединения - не создаётся URLRequest")
             completion(.failure(ProfileNetworkError.requestCancelled))
             return
         }
@@ -73,12 +73,12 @@ final class ProfileService {
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             switch result {
             case .success(let profileResult):
-                print("[fetchProfile]: Данные успешно декодированы: \(profileResult)")
+                print("[ProfileService|fetchProfile]: Данные успешно декодированы: \(profileResult)")
                 let profile = Profile(profileResult: profileResult)
                 self?.profile = profile
                 completion(.success(profile))
             case .failure(let error):
-                print("[fetchProfile]: Ошибка декодирования - \(error.localizedDescription)")
+                print("[ProfileService|fetchProfile]: Ошибка декодирования - \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }

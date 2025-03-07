@@ -25,21 +25,21 @@ final class ProfileImageService {
     
     func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
         currentTask?.cancel()
-        print("[fetchProfile]: Отправка запроса для картинки")
+        print("[ProfileImageService|fetchProfile]: Отправка запроса для картинки")
         
         guard let token = OAuth2TokenStorage().token else {
-            print("[fetchProfileImageURL]: Токен не получен")
+            print("[ProfileImageService|fetchProfileImageURL]: Токен не получен")
             completion(.failure(ProfileNetworkError.missingToken))
             return
         }
         
         guard let url = URL(string: "https://api.unsplash.com/users/\(username)") else {
-            print("[fetchProfileImageURL]: Невозможно создать URL")
+            print("[ProfileImageService|fetchProfileImageURL]: Невозможно создать URL")
             completion(.failure(ProfileNetworkError.urlSessionError))
             return
         }
         
-        print("URL успешно создан: \(url)")
+        print("[ProfileImageService|fetchProfileImageURL]: URL успешно создан: \(url)")
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -48,7 +48,7 @@ final class ProfileImageService {
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             switch result {
             case .success(let userResult):
-                print("[fetchProfileImageURL]: Успешный ответ: \(userResult)")
+                print("[ProfileImageService|fetchProfileImageURL]: Успешный ответ: \(userResult)")
                 let avatarURL = userResult.profileImage.small
                 self?.avatarURL = avatarURL  // Обновление avatarURL
                 DispatchQueue.main.async {
@@ -60,7 +60,7 @@ final class ProfileImageService {
                     )
                 }
             case .failure(let error):
-                print("[fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
+                print("[ProfileImageService|fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }
