@@ -15,8 +15,11 @@ struct UserResult: Codable { // ✅ Исправлено имя структур
 final class ProfileImageService {
     static let shared = ProfileImageService()
     private init() {}
-    
-    private(set) var avatarURL: String?  // Убедись, что URL правильно сохраняется
+    private(set) var avatarURL: String?  = nil {
+        didSet {
+            print("[ProfileImageService]: avatarURL обновлён: \(avatarURL ?? "nil")")
+        }
+    }// Убедись, что URL правильно сохраняется
     private var currentTask: URLSessionTask?
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
@@ -45,8 +48,9 @@ final class ProfileImageService {
         let task = URLSession.shared.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             switch result {
             case .success(let userResult):
+                print("[fetchProfileImageURL]: Успешный ответ: \(userResult)")
                 let avatarURL = userResult.profileImage.small
-                self?.avatarURL = avatarURL  // Убедись, что avatarURL сохраняется
+                self?.avatarURL = avatarURL  // Обновление avatarURL
                 DispatchQueue.main.async {
                     completion(.success(avatarURL))
                     NotificationCenter.default.post(
@@ -56,7 +60,7 @@ final class ProfileImageService {
                     )
                 }
             case .failure(let error):
-                print("[fetchProfileImageURL]: NetworkError - \(error.localizedDescription)")
+                print("[fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
                 completion(.failure(error))
             }
         }

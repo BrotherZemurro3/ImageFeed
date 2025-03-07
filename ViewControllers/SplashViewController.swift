@@ -26,7 +26,7 @@ final class SplashViewController: UIViewController {
         }
         
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController")
+            .instantiateViewController(withIdentifier: "TabBarController")
         
         window.rootViewController = tabBarController
     }
@@ -66,6 +66,8 @@ extension SplashViewController: AuthViewControllerDelegate {
         UIBlockingProgressHUD.show()
         ProfileService.shared.fetchProfile(token: token) { [weak self] (result: Result <Profile, Error>) in
             UIBlockingProgressHUD.dismiss()
+            
+        
             guard let self = self else { return }
             
             switch result {

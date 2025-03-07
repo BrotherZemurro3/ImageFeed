@@ -28,23 +28,13 @@ final class ProfileViewController: UIViewController {
                     guard let self = self else { return }
                     self.updateAvatar()
                 }
-        
-        print("🚀 Вызываем updateAvatar()")
         updateAvatar()
+        print("🚀 Вызываем updateAvatar()")
+        fetchProfile()
         setupUI()
-        
-        
-            
-          
-           
-            // Загрузка данных профиля
-            if let profile = profileService.profile {
-                updateProfileDetails(profile: profile)
-            } else {
-                print("Ошибка: профиль не загружен")
-            }
+      
         }
-
+  
         private func setupUI() {
             // Настройка profileImage
             profileImage.tintColor = .gray
@@ -110,20 +100,47 @@ final class ProfileViewController: UIViewController {
             print("Ошибка: avatarURL не может быть преобразован в URL: \(profileImageURL)")  // Логирование URL
             return
         }
-        
+        let processor = BlurImageProcessor(blurRadius: 5.0) |> RoundCornerImageProcessor(cornerRadius: 20)
         // Загрузка изображения с использованием Kingfisher
-        profileImage.kf.setImage(with: url,
-                                 placeholder: UIImage(named: "UserPhoto"),
-                                 options: [.transition(.fade(3))],
-                                 completionHandler: { result in
-            switch result {
-            case .success(let value):
-                print("Аватарка успешно загружена: \(value.source.url?.absoluteString ?? "Unknown URL")")
-            case .failure(let error):
-                print("Ошибка загрузки аватарки: \(error.localizedDescription)")  // Логирование ошибки загрузки
-            }
-        })
-    }
+        profileImage.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "UserPhoto"),
+                options: [
+                    .processor(processor),
+                    .transition(.fade(3))
+                ]
+            )
+        }
+        
+    private func fetchProfile() {
+           guard let token = OAuth2TokenStorage().token else {
+               print("Ошибка: нет токена")
+               return
+           }
+           
+           ProfileService.shared.fetchProfile(token: token) { [weak self] result in
+               DispatchQueue.main.async {
+                   switch result {
+                   case .success(let profile):
+                       self?.updateProfileDetails(profile: profile)
+                       // 🔥 Запрашиваем URL аватарки
+                                     ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { imageResult in
+                                         switch imageResult {
+                                         case .success(let avatarURL):
+                                             print("✅ URL аватарки загружен: (avatarURL)")
+                                             self?.updateAvatar() // Обновляем изображение в UI
+                                         case .failure(let error):
+                                             print("Ошибка загрузки аватарки: (error.localizedDescription)")
+                                         }
+                                     }
+
+                       
+                   case .failure(let error):
+                       print("Ошибка загрузки профиля: \(error.localizedDescription)")
+                   }
+               }
+           }
+       }
 
     func updateProfileDetails(profile: Profile) {
         print("[ProfileViewController]: Обновляем профиль - \(profile)")  // Логирование профиля
