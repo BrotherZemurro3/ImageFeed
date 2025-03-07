@@ -6,7 +6,7 @@ import Kingfisher
 
 
 final class ProfileViewController: UIViewController {
-    
+    // MARK: - UI Elements
     private let nameLabel = UILabel()
     private let loginLabel = UILabel()
     private let descriptionLabel = UILabel()
@@ -14,6 +14,7 @@ final class ProfileViewController: UIViewController {
     private let profileImage = UIImageView()
     private var profileimageSeviceObserver: NSObjectProtocol?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "YP Black")
@@ -34,7 +35,7 @@ final class ProfileViewController: UIViewController {
         setupUI()
         
     }
-    
+    // MARK: - UI Setup
     private func setupUI() {
         // Настройка profileImage
         profileImage.tintColor = .gray
@@ -88,7 +89,7 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 8),
         ])
     }
-    
+    // MARK: - Avatar Update
     private func updateAvatar() {
         guard let profileImageURL = ProfileImageService.shared.avatarURL else {
             print("[ProfileViewController|updateAvatar]: Ошибка: avatarURL отсутствует")  // Проверка, что URL есть
@@ -111,7 +112,7 @@ final class ProfileViewController: UIViewController {
             ]
         )
     }
-    
+    // MARK: - Fetch Profile
 func fetchProfile() {
         guard let token = OAuth2TokenStorage().token else {
             print("[ProfileViewController|fetchProfile]: Ошибка: нет токена")
@@ -141,7 +142,7 @@ func fetchProfile() {
             }
         }
     }
-    
+    // MARK: - Update Profile Details
    private func updateProfileDetails(profile: Profile) {
         print("[ProfileViewController]: Обновляем профиль - \(profile)")  // Логирование профиля
         nameLabel.text = profile.name.isEmpty ? "No Name" : profile.name

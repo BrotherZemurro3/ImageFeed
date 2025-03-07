@@ -13,7 +13,7 @@ final class SplashViewController: UIViewController {
         return imageView
     }()
     
-    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         view.backgroundColor = UIColor(named: "YP Black")
         view.addSubview(logoImageView)

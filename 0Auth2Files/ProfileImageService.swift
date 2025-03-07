@@ -1,7 +1,8 @@
 import Foundation
 
 
-struct UserResult: Codable { // ✅ Исправлено имя структуры (userResult -> UserResult) - занести в конспект
+struct UserResult: Codable {
+// MARK: - Модель данных пользователя
     struct ProfileImages: Codable {
         let small: String
     }
@@ -23,6 +24,7 @@ final class ProfileImageService {
     private var currentTask: URLSessionTask?
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
+    // MARK: - Загрузка URL изображения профиля
      func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
         currentTask?.cancel()
         print("[ProfileImageService|fetchProfile]: Отправка запроса для картинки")

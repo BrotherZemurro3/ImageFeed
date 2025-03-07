@@ -1,6 +1,6 @@
 import Foundation
 
-
+// MARK: - Модель данных для профиля
 struct ProfileResult: Codable {
     let username: String
     let name: String?
@@ -31,7 +31,7 @@ struct Profile {
         self.bio = profileResult.bio
     }
 }
-
+// MARK: - Ошибки сети для профиля
 enum ProfileNetworkError: Error {
     case requestCancelled
     case urlSessionError
@@ -45,6 +45,7 @@ final class ProfileService {
     private init() {}
     private(set) var profile: Profile?
     
+    // MARK: - Создание запроса с авторизацией
     private func createAuthRequest(url: URL, token: String) -> URLRequest? {
         print("[ProfileService|createAuthRequest]: Создаём запрос с токеном: \(token)")
         var request = URLRequest(url: url)
@@ -52,7 +53,7 @@ final class ProfileService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
-    
+    // MARK: - Запрос профиля пользователя
  func fetchProfile(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         currentTask?.cancel()
         print("[ProfileService|fetchProfile]: Отправка запроса...")
