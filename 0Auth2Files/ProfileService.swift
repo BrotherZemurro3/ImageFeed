@@ -1,5 +1,5 @@
 import Foundation
-import UIKit
+
 
 struct ProfileResult: Codable {
     let username: String
@@ -45,7 +45,7 @@ final class ProfileService {
     private init() {}
     private(set) var profile: Profile?
     
-    func createAuthRequest(url: URL, token: String) -> URLRequest? {
+    private func createAuthRequest(url: URL, token: String) -> URLRequest? {
         print("[ProfileService|createAuthRequest]: Создаём запрос с токеном: \(token)")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -53,7 +53,7 @@ final class ProfileService {
         return request
     }
     
-    func fetchProfile(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+ func fetchProfile(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         currentTask?.cancel()
         print("[ProfileService|fetchProfile]: Отправка запроса...")
         

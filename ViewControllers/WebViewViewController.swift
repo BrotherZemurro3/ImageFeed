@@ -8,9 +8,6 @@ enum WebViewConstants {
 }
 
 final class WebViewViewController: UIViewController {
-    
-    
-    
     @IBOutlet  var webView: WKWebView!
     @IBOutlet  var progressView: UIProgressView!
     @IBOutlet weak var backButton: UIButton!
@@ -91,7 +88,6 @@ final class WebViewViewController: UIViewController {
                                context: context)
         }
     }
-    
     private func updateProgress() {
         progressView.setProgress(Float(webView.estimatedProgress), animated: true)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001

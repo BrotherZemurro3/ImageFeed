@@ -1,10 +1,3 @@
-//
-//  TabBarController.swift
-//  ImageFeed
-//
-//  Created by Дионисий Коневиченко on 07.03.2025.
-//
-
 import UIKit
 
 final class TabBarController: UITabBarController {

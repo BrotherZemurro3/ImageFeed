@@ -1,4 +1,3 @@
-import UIKit
 import Foundation
 
 
@@ -19,13 +18,12 @@ extension URLSession {
         let decoder = JSONDecoder()
         
         let task = dataTask(with: request) { data, response, error in
-            
+
             func fulfillCompletionOnMainThread(_ result: Result<T, Error>) {
                 DispatchQueue.main.async {
                     completion(result)
                 }
             }
-            
             if let error = error {
                 print("[URLSession|objectTask]: URLRequestError - \(error.localizedDescription)")
                 fulfillCompletionOnMainThread(.failure(NetworkError.urlRequestError(error)))

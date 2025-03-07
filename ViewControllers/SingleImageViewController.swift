@@ -40,11 +40,11 @@ final class SingleImageViewController: UIViewController {
     }
     
     // MARK: - Actions
-    @IBAction func didTapBackButton() {
+    @IBAction private func didTapBackButton() {
         dismiss(animated: true, completion: nil)
         print("Нажата кнопка назад") // чек принт, т.к. срабатывает через раз
     }
-    @IBAction func didShareButton(_ sender: UIButton) {
+    @IBAction private func didShareButton(_ sender: UIButton) {
         guard let image else {return}
         let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         present(share, animated: true, completion: nil)

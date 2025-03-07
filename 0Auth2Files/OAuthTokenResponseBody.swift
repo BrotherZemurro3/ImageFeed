@@ -1,4 +1,3 @@
-import UIKit
 import Foundation
 
 // MARK: - Структура для декодинга JSON-ответа

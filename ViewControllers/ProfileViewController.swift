@@ -89,7 +89,7 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    func updateAvatar() {
+    private func updateAvatar() {
         guard let profileImageURL = ProfileImageService.shared.avatarURL else {
             print("[ProfileViewController|updateAvatar]: Ошибка: avatarURL отсутствует")  // Проверка, что URL есть
             return
@@ -112,7 +112,7 @@ final class ProfileViewController: UIViewController {
         )
     }
     
-    private func fetchProfile() {
+func fetchProfile() {
         guard let token = OAuth2TokenStorage().token else {
             print("[ProfileViewController|fetchProfile]: Ошибка: нет токена")
             return
@@ -142,7 +142,7 @@ final class ProfileViewController: UIViewController {
         }
     }
     
-    func updateProfileDetails(profile: Profile) {
+   private func updateProfileDetails(profile: Profile) {
         print("[ProfileViewController]: Обновляем профиль - \(profile)")  // Логирование профиля
         nameLabel.text = profile.name.isEmpty ? "No Name" : profile.name
         loginLabel.text = profile.loginName

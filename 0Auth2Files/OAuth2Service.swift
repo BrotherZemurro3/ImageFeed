@@ -1,4 +1,3 @@
-import UIKit
 import Foundation
 
 final class OAuth2Service {
@@ -13,40 +12,6 @@ final class OAuth2Service {
     
     private init() {}
     
-    
-    
-    // MARK: - Запрос Токена
-    func makeOAuthTokenRequest(code: String) -> URLRequest? {
-        // Объявляю базовый URL, который состоит из схемы и имени
-        guard let baseURL = URL(string: "https://unsplash.com") else {
-            assertionFailure("Invalid base URL")
-            return nil
-        }
-        
-        // Полученние конечного URL , собранного из базового URL, пути и параметров запроса (констант)
-        var components = URLComponents()
-        components.scheme = baseURL.scheme
-        components.host = baseURL.host
-        components.path = "/oauth/token"
-        
-        components.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "client_secret", value: Constants.secretKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "code", value: code),
-            URLQueryItem(name: "grant_type", value: "authorization_code")
-        ]
-        // Получение URL с обращением к свойству url у собранного объекта URLComponents
-        guard let url = components.url else {
-            fatalError("Failed to construct URL from components")
-        }
-        
-        // Создан URLRequest и задание ему метода Post в свойсвте httpMethod
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        return request
-    }
-    
     enum OAuthError: Error {
         case invalidRequest
         case networkError(Error)
@@ -57,8 +22,11 @@ final class OAuth2Service {
         
     }
     
+    
+
+    
     // MARK: - Извлечение токена
-    func fetchAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+     func fetchAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         print("[OAuth2Service|fetchAuthToken]: fetchAuthToken вызван с кодом: \(code)")
         assert(Thread.isMainThread)                         // 4
         if task != nil {
@@ -158,5 +126,37 @@ final class OAuth2Service {
         
         task.resume()
     }
-    
+    // MARK: - Запрос Токена
+    private func makeOAuthTokenRequest(code: String) -> URLRequest? {
+        // Объявляю базовый URL, который состоит из схемы и имени
+        guard let baseURL = URL(string: "https://unsplash.com") else {
+            assertionFailure("Invalid base URL")
+            return nil
+        }
+        
+        // Полученние конечного URL , собранного из базового URL, пути и параметров запроса (констант)
+        var components = URLComponents()
+        components.scheme = baseURL.scheme
+        components.host = baseURL.host
+        components.path = "/oauth/token"
+        
+        components.queryItems = [
+            URLQueryItem(name: "client_id", value: Constants.accessKey),
+            URLQueryItem(name: "client_secret", value: Constants.secretKey),
+            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
+            URLQueryItem(name: "code", value: code),
+            URLQueryItem(name: "grant_type", value: "authorization_code")
+        ]
+        // Получение URL с обращением к свойству url у собранного объекта URLComponents
+        guard let url = components.url else {
+            assertionFailure("Failed to construct URL from components")
+            return nil
+        }
+        
+        // Создан URLRequest и задание ему метода Post в свойсвте httpMethod
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        return request
+    }
+
 }

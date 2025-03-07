@@ -1,5 +1,5 @@
 import Foundation
-import UIKit
+
 
 struct UserResult: Codable { // ✅ Исправлено имя структуры (userResult -> UserResult) - занести в конспект
     struct ProfileImages: Codable {
@@ -19,11 +19,11 @@ final class ProfileImageService {
         didSet {
             print("[ProfileImageService]: avatarURL обновлён: \(avatarURL ?? "nil")")
         }
-    }// Убедись, что URL правильно сохраняется
+    }
     private var currentTask: URLSessionTask?
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
-    func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
+     func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
         currentTask?.cancel()
         print("[ProfileImageService|fetchProfile]: Отправка запроса для картинки")
         
