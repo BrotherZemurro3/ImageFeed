@@ -101,7 +101,7 @@ final class ProfileViewController: UIViewController {
             print("ProfileViewController|updateAvatar]: Ошибка: avatarURL не может быть преобразован в URL: \(profileImageURL)")  // Логирование URL
             return
         }
-        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+        let processor = RoundCornerImageProcessor(cornerRadius: 50, backgroundColor: .ypBlack)
         // Загрузка изображения с использованием Kingfisher
         profileImage.kf.setImage(
             with: url,
