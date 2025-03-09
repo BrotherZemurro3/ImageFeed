@@ -12,27 +12,38 @@ final class ProfileViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private let profileService = ProfileService.shared
     private let profileImage = UIImageView()
-    private var profileimageSeviceObserver: NSObjectProtocol?
-    
+    private var profile: Profile?
+    private var profileObserver: NSObjectProtocol?
+    private var profileImageObserver: NSObjectProtocol?
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("[ProfileViewController]: Загружен")
+
         view.backgroundColor = UIColor(named: "YP Black")
         profileImage.clipsToBounds = true
-        
-        // Настройка observer для обновления аватарки
-        profileimageSeviceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
-        fetchProfile()
+
         setupUI()
+        updateAvatar()
+        updateProfile()
+
+        profileObserver = NotificationCenter.default.addObserver(
+            forName: ProfileService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            print("[ProfileViewController]: Получено обновление профиля")
+            self?.updateProfile()
+        }
+
+        profileImageObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            print("[ProfileViewController]: Получено обновление аватарки")
+            self?.updateAvatar()
+        }
         
     }
     // MARK: - UI Setup
@@ -112,41 +123,23 @@ final class ProfileViewController: UIViewController {
             ]
         )
     }
-    // MARK: - Fetch Profile
-func fetchProfile() {
-        guard let token = OAuth2TokenStorage().token else {
-            print("[ProfileViewController|fetchProfile]: Ошибка: нет токена")
+
+    // MARK: - Update Profile Details
+    private func updateProfile() {
+        guard let profile = ProfileService.shared.profile else {
+            print("[ProfileViewController|updateProfile]: Профиль отсутствует")
             return
         }
-        
-        ProfileService.shared.fetchProfile(token: token) { [weak self] result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let profile):
-                    self?.updateProfileDetails(profile: profile)
-                    // 🔥 Запрашиваем URL аватарки
-                    ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { imageResult in
-                        switch imageResult {
-                        case .success(let avatarURL):
-                            print("[ProfileViewController|fetchProfile]: URL аватарки загружен: \(avatarURL)")
-                            self?.updateAvatar() // Обновляем изображение в UI
-                        case .failure(let error):
-                            print("[ProfileViewController|fetchProfile]: Ошибка загрузки аватарки: \(error.localizedDescription)")
-                        }
-                    }
-                    
-                    
-                case .failure(let error):
-                    print("[ProfileViewController|fetchProfile]: Ошибка загрузки профиля: \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-    // MARK: - Update Profile Details
-   private func updateProfileDetails(profile: Profile) {
-        print("[ProfileViewController]: Обновляем профиль - \(profile)")  // Логирование профиля
+        print("[ProfileViewController|updateProfile]: Обновляем профиль - \(profile)")
+
         nameLabel.text = profile.name.isEmpty ? "No Name" : profile.name
         loginLabel.text = profile.loginName
         descriptionLabel.text = profile.bio ?? "No Bio"
+    }
+    
+    func configure(with profile: Profile, avatarURL: String) {
+        self.profile = profile
+        self.updateProfile()
+        self.profileImage.kf.setImage(with: URL(string: avatarURL))
     }
 }

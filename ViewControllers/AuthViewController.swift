@@ -50,8 +50,17 @@ final class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    
-}
+    private func showAuthErrorAlert() {
+          let alert = UIAlertController(
+              title: "Ошибка авторизации",
+              message: "Не удалось войти. Попробуйте ещё раз.",
+              preferredStyle: .alert
+          )
+          alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+          present(alert, animated: true, completion: nil)
+      }
+  }
+
 
 // MARK: - Реализация делегата WebViewViewControllerDelegate
 extension AuthViewController: WebViewViewControllerDelegate {
@@ -97,16 +106,4 @@ extension AuthViewController: WebViewViewControllerDelegate {
         self.delegate?.didAuthenticate(self)
     }
     
-    
-    
-    // MARK: - Метод для показа ошибки авторизации
-    private func showAuthErrorAlert() {
-        let alert = UIAlertController(
-            title: "Ошибка авторизации",
-            message: "Не удалось выполнить вход. Попробуйте ещё раз.",
-            preferredStyle: .alert
-        )
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
 }

@@ -43,8 +43,21 @@ final class ProfileService {
     private var currentTask: URLSessionTask?
     static let shared = ProfileService()
     private init() {}
-    private(set) var profile: Profile?
+    private(set) var profile: Profile? {
+         didSet {
+             NotificationCenter.default.post(
+                 name: ProfileService.didChangeNotification,
+                 object: self
+             )
+         }
+     }
+    static let didChangeNotification = Notification.Name("ProfileServiceDidChange")
     
+    func updateProfile(_ profile: Profile) {
+        print("[ProfileService|updateProfile]: Новый профиль - \(profile)")
+        self.profile = profile
+        NotificationCenter.default.post(name: ProfileService.didChangeNotification, object: nil)
+    }
     // MARK: - Создание запроса с авторизацией
     private func createAuthRequest(url: URL, token: String) -> URLRequest? {
         print("[ProfileService|createAuthRequest]: Создаём запрос с токеном: \(token)")
@@ -54,7 +67,7 @@ final class ProfileService {
         return request
     }
     // MARK: - Запрос профиля пользователя
- func fetchProfile(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+ func fetchProfileInfo(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         currentTask?.cancel()
         print("[ProfileService|fetchProfile]: Отправка запроса...")
         
@@ -63,6 +76,7 @@ final class ProfileService {
             completion(.failure(ProfileNetworkError.urlSessionError))
             return
         }
+     
         
         print("URL successfully created: \(url)")
         guard let request = createAuthRequest(url: url, token: token) else {

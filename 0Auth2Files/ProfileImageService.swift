@@ -16,9 +16,13 @@ struct UserResult: Codable {
 final class ProfileImageService {
     static let shared = ProfileImageService()
     private init() {}
-    private(set) var avatarURL: String?  = nil {
+    private(set) var avatarURL: String? {
         didSet {
-            print("[ProfileImageService]: avatarURL обновлён: \(avatarURL ?? "nil")")
+            print("[ProfileImageService]: avatarURL обновлён -> \(String(describing: avatarURL))")
+            NotificationCenter.default.post(
+                name: ProfileImageService.didChangeNotification,
+                object: self
+            )
         }
     }
     private var currentTask: URLSessionTask?

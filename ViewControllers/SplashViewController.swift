@@ -4,6 +4,8 @@ final class SplashViewController: UIViewController {
     private let storage = OAuth2TokenStorage()
     private let showAuthenticationScreenSegueIdentifier = "showAuthenticationScreen"
     private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
+    
     
     private let logoImageView: UIImageView = {
         let imageView = UIImageView()
@@ -70,30 +72,41 @@ extension SplashViewController: AuthViewControllerDelegate {
             self?.fetchProfile(token:token)
         }
     }
-  func fetchProfile(token: String) {
+    func fetchProfile(token: String) {
         UIBlockingProgressHUD.show()
-        ProfileService.shared.fetchProfile(token: token) { [weak self] (result: Result <Profile, Error>) in
+        profileService.fetchProfileInfo(token: token) { [weak self] (result: Result<Profile, Error>) in
             UIBlockingProgressHUD.dismiss()
-            
-            
             guard let self = self else { return }
             
             switch result {
             case .success(let profile):
+                print("[SplashViewController]: Профиль загружен: \(profile)")
+                
+                // Сохраняем профиль в сервис
+                self.profileService.updateProfile(profile)
+                // Оповещаем подписчиков, что профиль обновился
+                NotificationCenter.default.post(name: ProfileService.didChangeNotification, object: nil)
+                
                 ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { imageResult in
                     switch imageResult {
                     case .success(let avatarURL):
-                        print("[SplashViewController|fetchProfile]: Аватарка успешно загружена: \(avatarURL)")
+                        print("[SplashViewController]: Аватарка успешно загружена: \(avatarURL)")
+                        
+                        // Оповещаем о загрузке аватарки
+                        NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: nil)
+                        
                     case .failure(let error):
-                        print("[SplashViewController|fetchProfile]: Ошибка загрузки аватарки: \(error.localizedDescription)")
+                        print("[SplashViewController]: Ошибка загрузки аватарки: \(error.localizedDescription)")
                     }
                 }
-                self.switchTabBarController()
                 
+                // Вызов switchTabBarController в любом случае
+                self.switchTabBarController()
             case .failure(let fetchError):
-                print("[SplashViewController|fetchProfile]: Не удалось получить данные профиля: \(fetchError.localizedDescription)")
+                  print("[SplashViewController]: Не удалось получить профиль: \(fetchError.localizedDescription)")
+              }
             }
         }
+        
     }
-    
-}
+
