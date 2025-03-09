@@ -14,7 +14,7 @@ struct UserResult: Codable {
 }
 
 final class ProfileImageService {
-    static let shared = ProfileImageService()
+    static var shared = ProfileImageService()
     private init() {}
     private(set) var avatarURL: String? {
         didSet {
@@ -28,6 +28,10 @@ final class ProfileImageService {
     private var currentTask: URLSessionTask?
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
+    func updateAvatarURL(_ avatarURL: String) {
+        self.avatarURL = avatarURL
+        NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: nil)
+    }
     // MARK: - Загрузка URL изображения профиля
      func fetchProfileImageURL(username: String, completion: @escaping (Result<String, Error>) -> Void) {
         currentTask?.cancel()

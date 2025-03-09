@@ -52,8 +52,8 @@ final class AuthViewController: UIViewController {
     }
     private func showAuthErrorAlert() {
           let alert = UIAlertController(
-              title: "Ошибка авторизации",
-              message: "Не удалось войти. Попробуйте ещё раз.",
+              title: "Что-то пошло не так(",
+              message: "Не удалось войти в систему",
               preferredStyle: .alert
           )
           alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

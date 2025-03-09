@@ -15,6 +15,7 @@ final class ProfileViewController: UIViewController {
     private var profile: Profile?
     private var profileObserver: NSObjectProtocol?
     private var profileImageObserver: NSObjectProtocol?
+    var token: String?
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,10 +23,13 @@ final class ProfileViewController: UIViewController {
 
         view.backgroundColor = UIColor(named: "YP Black")
         profileImage.clipsToBounds = true
-
         setupUI()
+        
+        
         updateAvatar()
         updateProfile()
+        
+        
 
         profileObserver = NotificationCenter.default.addObserver(
             forName: ProfileService.didChangeNotification,
@@ -33,8 +37,10 @@ final class ProfileViewController: UIViewController {
             queue: .main
         ) { [weak self] _ in
             print("[ProfileViewController]: Получено обновление профиля")
-            self?.updateProfile()
-        }
+            DispatchQueue.main.async {
+                   self?.updateProfile()
+               }
+           }
 
         profileImageObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.didChangeNotification,
@@ -42,9 +48,10 @@ final class ProfileViewController: UIViewController {
             queue: .main
         ) { [weak self] _ in
             print("[ProfileViewController]: Получено обновление аватарки")
-            self?.updateAvatar()
-        }
-        
+            DispatchQueue.main.async {
+                  self?.updateAvatar()
+              }
+          }
     }
     // MARK: - UI Setup
     private func setupUI() {
@@ -102,44 +109,57 @@ final class ProfileViewController: UIViewController {
     }
     // MARK: - Avatar Update
     private func updateAvatar() {
-        guard let profileImageURL = ProfileImageService.shared.avatarURL else {
-            print("[ProfileViewController|updateAvatar]: Ошибка: avatarURL отсутствует")  // Проверка, что URL есть
+        guard let avatarURLString = ProfileImageService.shared.avatarURL, !avatarURLString.isEmpty else {
+            print("[ProfileViewController|updateAvatar]: Ошибка: avatarURL отсутствует или пустое значение")
+            profileImage.image = UIImage(named: "UserPhoto")  // Заглушка на случай отсутствия URL
             return
         }
-        print("avatarURL: \(profileImageURL)")  // Лог для проверки, что URL правильный
         
-        guard let url = URL(string: profileImageURL) else {
-            print("ProfileViewController|updateAvatar]: Ошибка: avatarURL не может быть преобразован в URL: \(profileImageURL)")  // Логирование URL
+        guard let url = URL(string: avatarURLString) else {
+            print("[ProfileViewController|updateAvatar]: Ошибка: avatarURL не может быть преобразован в URL: \(avatarURLString)")
+            profileImage.image = UIImage(named: "UserPhoto")  // Заглушка на случай неверного URL
             return
         }
+        
         let processor = RoundCornerImageProcessor(cornerRadius: 50, backgroundColor: .ypBlack)
+        
         // Загрузка изображения с использованием Kingfisher
         profileImage.kf.setImage(
             with: url,
             placeholder: UIImage(named: "UserPhoto"),
             options: [
                 .processor(processor),
-                .transition(.fade(3))
-            ]
-        )
+                .transition(.fade(0.3))
+            ]) { result in
+                switch result {
+                case .success(let value):
+                    print("[ProfileViewController|updateAvatar]: Аватарка успешно загружена с URL: \(value.source.url?.absoluteString ?? "неизвестно")")
+                case .failure(let error):
+                    print("[ProfileViewController|updateAvatar]: Ошибка при загрузке аватарки: \(error.localizedDescription)")
+                    self.profileImage.image = UIImage(named: "UserPhoto")  // Заглушка в случае ошибки
+                }
+            }
     }
+    
+    
+
 
     // MARK: - Update Profile Details
     private func updateProfile() {
         guard let profile = ProfileService.shared.profile else {
-            print("[ProfileViewController|updateProfile]: Профиль отсутствует")
+            print("[ProfileViewController|updateProfile]: Профиль отсутствует или не был загружен")
+            nameLabel.text = "No Name"
+            loginLabel.text = "No Login"
+            descriptionLabel.text = "No Bio"
             return
         }
+        
         print("[ProfileViewController|updateProfile]: Обновляем профиль - \(profile)")
 
+        // Обновляем UI с данными профиля, если они присутствуют
         nameLabel.text = profile.name.isEmpty ? "No Name" : profile.name
-        loginLabel.text = profile.loginName
-        descriptionLabel.text = profile.bio ?? "No Bio"
+        loginLabel.text = profile.loginName.isEmpty ? "No Login" : profile.loginName
+        descriptionLabel.text = profile.bio?.isEmpty == false ? profile.bio : "No Bio"
     }
-    
-    func configure(with profile: Profile, avatarURL: String) {
-        self.profile = profile
-        self.updateProfile()
-        self.profileImage.kf.setImage(with: URL(string: avatarURL))
-    }
+
 }

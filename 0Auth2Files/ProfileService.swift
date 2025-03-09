@@ -41,7 +41,7 @@ enum ProfileNetworkError: Error {
 
 final class ProfileService {
     private var currentTask: URLSessionTask?
-    static let shared = ProfileService()
+    static var shared = ProfileService()
     private init() {}
     private(set) var profile: Profile? {
          didSet {
@@ -54,7 +54,6 @@ final class ProfileService {
     static let didChangeNotification = Notification.Name("ProfileServiceDidChange")
     
     func updateProfile(_ profile: Profile) {
-        print("[ProfileService|updateProfile]: Новый профиль - \(profile)")
         self.profile = profile
         NotificationCenter.default.post(name: ProfileService.didChangeNotification, object: nil)
     }
@@ -66,6 +65,7 @@ final class ProfileService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
+    
     // MARK: - Запрос профиля пользователя
  func fetchProfileInfo(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
         currentTask?.cancel()
