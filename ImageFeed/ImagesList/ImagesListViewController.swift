@@ -1,31 +1,33 @@
+// ViewController.swift
+// ImageFeed
 //
-//  ViewController.swift
-//  ImageFeed
-//
-//  Created by Дионисий Коневиченко on 21.12.2024.
+// Created by Дионисий Коневиченко on 21.12.2024.
 //
 
 import UIKit
 import Foundation
+
 class ImagesListViewController: UIViewController {
+
     @IBOutlet private var tableView: UITableView!
-    private let photosName: [String] = Array(0..<20).map{ "\($0)"}
+
+    private let photosName: [String] = Array(0..<20).map { "\($0)" }
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
-    
+   
+
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         return formatter
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.rowHeight = 200
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
             guard
@@ -35,7 +37,6 @@ class ImagesListViewController: UIViewController {
                 assertionFailure("Invalid segue destination")
                 return
             }
-            
             let image = UIImage(named: photosName[indexPath.row])
             viewController.image = image
         } else {
@@ -46,17 +47,16 @@ class ImagesListViewController: UIViewController {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photosName.count // Добавляем в метод, который определяет количество ячеек в секции таблицы возврат значения.
+        return photosName.count
     }
-    
-    // Метод протокола, возвращающий ячейку.
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath) // Метод, который из всех ячеек, зарегестрированных в таблице, возвращает ячейку, по заранее добавленному идентификатору
-        guard let imageListCell = cell as? ImagesListCell else { // Приведение типов для работы с ячейками, если ничего не будет, то вернем обычную ячейку
+        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
+        guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
         }
         configCell(for: imageListCell, with: indexPath)
-        return imageListCell // Возврат ячейчки, являющейся наследником UITableViewCell
+        return imageListCell
     }
 }
 
@@ -76,8 +76,8 @@ extension ImagesListViewController {
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
-    } // метод, отвечающий за дейсвтия, которые будут выполнены при тапе по ячейки таблицы. Адрес ячейки, содержащийся в indexPath передаётся в качестве аргумента.
-    
+    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         guard let image = UIImage(named: photosName[indexPath.row]) else {
             return 0

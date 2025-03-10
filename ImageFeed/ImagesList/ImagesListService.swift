@@ -12,11 +12,12 @@ struct Photo {
     
     init(from photoResult: PhotoResult) {
         self.id = photoResult.id
-        self.imageUrl = photoResult.urls.regular
-        self.width = photoResult.width
-        self.height = photoResult.height
-        self.description = photoResult.description
-        self.likes = photoResult.likes
+        self.size = CGSize(width: photoResult.width, height: photoResult.height)
+        self.createdAt = ISO8601DateFormatter().date(from: photoResult.createdAt)
+        self.welcomeDescription = photoResult.description
+        self.thumbImageURL = photoResult.urls.thumb
+        self.largeImageURL = photoResult.urls.full
+        self.isLiked = photoResult.likedByUser
     }
 }
 
@@ -66,35 +67,47 @@ final class ImagesListService {
     private var currentTask: URLSessionTask?
     private var dataTask:  URLSessionTask?
     private var lastLoadedPage: Int?
+    static var shared = ImagesListService()
+    private init() {}
+    private lazy var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        return formatter
+    }()
     
     
     
- private func fetchPhotosNextPage() {
-     guard currentTask == nil else {return}
-     let nextPage = (lastLoadedPage ?? 0) + 1
-     let task = NetworkService.fetchPhotos(page:nextPage) { [weak self] result in
-         DispatchQueue.main.async {
-             guard let self = self else {return}
-             self.currentTask = nil
-             
-             switch result {
-             case .success(let new photos):
-                 self.photos.append(contentOf: newPhotos.map {Photo(from: $0)})
-                 self.lastLoadedPage = netxPage
-                 
-                 NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
-             case .failure(let error):
-                 print("Ошибка загрузки фотографий: \(error.localizedDescription)")
-             }
-         }
-     }
+    private func fetchPhotosNextPage() {
+        guard currentTask == nil else { return }
+        
+        let nextPage = (lastLoadedPage ?? 0) + 1
+        let task = NetworkService.fetchPhotos(page: nextPage) { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                self.currentTask = nil
+                
+                switch result {
+                case .success(let newPhotos):
+                    self.photos.append(contentsOf: newPhotos.map { Photo(from: $0) })
+                    self.lastLoadedPage = nextPage
+                    
+                    NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
+                case .failure(let error):
+                    print("Ошибка загрузки фотографий: \(error.localizedDescription)")
+                }
+            }
+        }
+        currentTask = task
+        task.resume()
     }
 
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath) {
         //  В этом методе можно проверить условие indexPath.row + 1 == photos.count, и если оно верно — вызывать fetchPhotosNextPage().
-        indexPath.row + 1 == photos.count
-        fetchPhotosNextPage()
-    }
+        if indexPath.row + 1 == photos.count {
+             fetchPhotosNextPage()
+         }
+     }
     
 }

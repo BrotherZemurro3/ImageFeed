@@ -40,7 +40,6 @@
 
 /* Begin PBXFileReference section */
 		3A2A3F812D78489A001EFFE6 /* URLSession+data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+data.swift"; sourceTree = "<group>"; };
-		3A3666B52D7EED8F0080269E /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
 		3A4DAFB42D17028E00ECACBA /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DAFCE2D17029200ECACBA /* ImageFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DAFD82D17029200ECACBA /* ImageFeedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +57,7 @@
 		3A4DAFE02D17029200ECACBA /* Exceptions for "ImageFeed" folder in "ImageFeed" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				ImagesList/ImagesListService.swift,
 				Info.plist,
 			);
 			target = 3A4DAFB32D17028E00ECACBA /* ImageFeed */;
@@ -162,7 +162,6 @@
 		3AC801352D514F5F00867A22 /* 0Auth2Files */ = {
 			isa = PBXGroup;
 			children = (
-				3A3666B52D7EED8F0080269E /* ImagesListService.swift */,
 				3A2A3F812D78489A001EFFE6 /* URLSession+data.swift */,
 				3ABA40A72D75B6A000C40E61 /* ProfileImageService.swift */,
 				3ADF94982D73100600F5E964 /* ProfileService.swift */,

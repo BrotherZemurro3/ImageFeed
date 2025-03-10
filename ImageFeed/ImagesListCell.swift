@@ -7,6 +7,8 @@
 
 import UIKit
 import Foundation
+import Kingfisher
+
 
 final class ImagesListCell: UITableViewCell {
     static let reuseIdentifier = "ImagesListCell"
@@ -14,4 +16,13 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var dateLabel: UILabel!
+    
+
+override func prepareForReuse() {
+    super.prepareForReuse()
+        cellImage.kf.cancelDownloadTask() // Отмена загрузки при переиспользовании ячейки
+        cellImage.image = nil
+}
+
+    
 }
