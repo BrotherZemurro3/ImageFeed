@@ -50,15 +50,7 @@ final class AuthViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    private func showAuthErrorAlert() {
-          let alert = UIAlertController(
-              title: "Что-то пошло не так(",
-              message: "Не удалось войти в систему",
-              preferredStyle: .alert
-          )
-          alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-          present(alert, animated: true, completion: nil)
-      }
+
   }
 
 
@@ -105,5 +97,25 @@ extension AuthViewController: WebViewViewControllerDelegate {
         vc.dismiss(animated: true)
         self.delegate?.didAuthenticate(self)
     }
-    
+     func showAuthErrorAlert() {
+        print("[AuthViewController]: Вызван showAuthErrorAlert()") // ✅ Лог для проверки
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+
+         DispatchQueue.main.async {
+             if let presented = self.presentedViewController {
+                 print("[AuthViewController]: Закрываем ранее открытый presentedViewController: \(presented)")
+                 presented.dismiss(animated: false) // Принудительно закрываем перед показом алерта
+             }
+             
+             self.present(alert, animated: true) {
+                 print("[AuthViewController]: Алерт успешно показан!")
+             }
+         }
+    }
+
 }

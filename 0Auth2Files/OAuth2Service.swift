@@ -145,7 +145,7 @@ final class OAuth2Service {
             URLQueryItem(name: "client_secret", value: Constants.secretKey),
             URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
             URLQueryItem(name: "code", value: code),
-            URLQueryItem(name: "grant_type", value: "authorization_code")
+            URLQueryItem(name: "grant_type", value: "authorization_code") 
         ]
         // Получение URL с обращением к свойству url у собранного объекта URLComponents
         guard let url = components.url else {

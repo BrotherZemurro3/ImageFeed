@@ -1,6 +1,7 @@
 import UIKit
 import Foundation
 import Kingfisher
+import SwiftKeychainWrapper
 
 
 
@@ -76,6 +77,7 @@ final class ProfileViewController: UIViewController {
             logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
             logoutButton.centerYAnchor.constraint(equalTo: profileImage.centerYAnchor),
         ])
+        logoutButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         
         // Настройка nameLabel
         nameLabel.textColor = .white
@@ -141,6 +143,15 @@ final class ProfileViewController: UIViewController {
             }
     }
     
+    @objc
+    private func didTapButton() {
+        let removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "AuthToken")
+        if removeSuccessful {
+            print("[didTapButton] key is removes from keychain")
+        } else {
+            print("Ключ еще в кейчейне")
+        }
+    }
     
 
 
