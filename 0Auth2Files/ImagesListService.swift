@@ -61,42 +61,40 @@ struct PhotoResult: Codable {
 
 
 final class ImagesListService {
-    private let photos: [Photo]
+ var photos: [Photo]
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     private var currentTask: URLSessionTask?
     private var dataTask:  URLSessionTask?
-    private var lastLoadedPage
+    private var lastLoadedPage: Int?
     
     
     
  private func fetchPhotosNextPage() {
-     guard currentTask == nil else {
-         return
-     }
-          let nextPage = (lastLoadedPage?.number ?? 0) + 1
-            if nextPage == 1 {
-                photos.removeAll()
-            }
-     ImagesListService.fetchPhotosNextPage() { [weak self] result in
+     guard currentTask == nil else {return}
+     let nextPage = (lastLoadedPage ?? 0) + 1
+     let task = NetworkService.fetchPhotos(page:nextPage) { [weak self] result in
          DispatchQueue.main.async {
              guard let self = self else {return}
-             self.isLoading = false
+             self.currentTask = nil
              
              switch result {
              case .success(let new photos):
-                 self.photos.append(contentOf: newPhotos)
+                 self.photos.append(contentOf: newPhotos.map {Photo(from: $0)})
                  self.lastLoadedPage = netxPage
                  
                  NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
              case .failure(let error):
                  print("Ошибка загрузки фотографий: \(error.localizedDescription)")
              }
-         }}
+         }
+     }
     }
 
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath) {
         //  В этом методе можно проверить условие indexPath.row + 1 == photos.count, и если оно верно — вызывать fetchPhotosNextPage().
+        indexPath.row + 1 == photos.count
+        fetchPhotosNextPage()
     }
     
 }
