@@ -8,30 +8,31 @@ enum WebViewConstants {
 }
 
 final class WebViewViewController: UIViewController {
-    
- 
-    
     @IBOutlet  var webView: WKWebView!
     @IBOutlet  var progressView: UIProgressView!
     @IBOutlet weak var backButton: UIButton!
     
-    
+    private var estimatedProgressObservation: NSKeyValueObservation?
     weak var delegate: WebViewViewControllerDelegate?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         webView.navigationDelegate = self
+        estimatedProgressObservation = webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
         loadAuthView()
-        
-        
     }
+    
     // MARK: - Actions
     
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
-        print("Нажата кнопка назад") // чек принт, т.к. срабатывает через раз
     }
     
     // MAR: - Private Methods
@@ -51,7 +52,7 @@ final class WebViewViewController: UIViewController {
         guard let url = urlComponents.url else {
             return
         }
-        print("Запрашиваем авторизацию по URL: \(url.absoluteString)")
+        print("[WebViewController|loadAuthView]: Запрашиваем авторизацию по URL: \(url.absoluteString)")
         let request = URLRequest(url: url)
         webView.load(request)
         
@@ -87,7 +88,6 @@ final class WebViewViewController: UIViewController {
                                context: context)
         }
     }
-    
     private func updateProgress() {
         progressView.setProgress(Float(webView.estimatedProgress), animated: true)
         progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
@@ -102,12 +102,12 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         if let code = code(from: navigationAction) {
-            print("Код авторизации получен: \(code)")
+            print("[extension WebViewViewController|WKNavigationDelegate]:Код авторизации получен: \(code)")
             
             if delegate == nil {
-                print("⚠️ delegate равен nil!")
+                print("[extension WebViewViewController|WKNavigationDelegate]: delegate равен nil!")
             } else {
-                print("✅ delegate установлен")
+                print("[extension WebViewViewController|WKNavigationDelegate]: delegate установлен")
             }
             
             delegate?.webViewViewController(self, didAuthenticateWithCode: code)
@@ -119,20 +119,22 @@ extension WebViewViewController: WKNavigationDelegate {
     // MARK: - Извлечение кода авторищации из URL-адреса перенаправления
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url {
-            print("Перенаправление на URL: \(url.absoluteString)")
+            print("[extension WebViewViewController|code(from navigationAction: WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
         }
         
         if
             let url = navigationAction.request.url,
-            let urlComponents = URLComponents(string: url.absoluteString),
+            
+                let urlComponents = URLComponents(string: url.absoluteString),
             urlComponents.path == "/oauth/authorize/native",
             let items = urlComponents.queryItems,
             let codeItem = items.first(where: { $0.name == "code" })
         {
-            print("Код авторизации найден: \(codeItem.value ?? "nil")")
+            print("[extension WebViewViewController|code(from navigationAction: WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
+            print("[code(from navigationAction: WKNavigationAction)]: Код авторизации найден: \(codeItem.value ?? "nil")")
             return codeItem.value
         } else {
-            print("Код авторизации не найден")
+            print("[extension WebViewViewController|code(from navigationAction: WKNavigationAction)]: Код авторизации не найден")
             return nil
         }
     }
