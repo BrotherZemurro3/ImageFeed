@@ -17,12 +17,24 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var cellImage: UIImageView!
     @IBOutlet var dateLabel: UILabel!
     
-
+    private var currentImageURL: String?
+    weak var delegate: ImagesListCellDelegate?
+    
 override func prepareForReuse() {
     super.prepareForReuse()
         cellImage.kf.cancelDownloadTask() // Отмена загрузки при переиспользовании ячейки
         cellImage.image = nil
 }
+    
+    func configure(with photo: Photo) {
+        currentImageURL = photo.thumbImageURL
+        let placeholder = UIImage(named: "Stub")
+        cellImage.kf.indicatorType = .activity
+        cellImage.kf.setImage(with: URL(string: photo.thumbImageURL), placeholder: placeholder)
+        dateLabel.text = photo.createdAt?.dateTimeString ?? "Неизвестно"
+    }
+    
+    
 
     
 }

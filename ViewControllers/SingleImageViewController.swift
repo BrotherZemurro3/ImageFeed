@@ -7,6 +7,7 @@
 
 import UIKit
 import Foundation
+import Kingfisher
 
 final class SingleImageViewController: UIViewController {
     var image: UIImage? {
@@ -24,6 +25,7 @@ final class SingleImageViewController: UIViewController {
     @IBOutlet private var imageView: UIImageView!
     
     @IBOutlet var shareButton: UIButton!
+    var imageURL: String?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
