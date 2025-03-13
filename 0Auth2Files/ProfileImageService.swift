@@ -25,6 +25,12 @@ final class ProfileImageService {
             )
         }
     }
+    
+    func clearAvatar() {
+           avatarURL = nil
+           NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self)
+               print("Аватарка удалена")
+       }
     private var currentTask: URLSessionTask?
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     

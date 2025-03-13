@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A0062E32D837B4C00D56922 /* ProfileLogoutService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0062E22D837B3A00D56922 /* ProfileLogoutService.swift */; };
 		3A12CA142D80781700F586EA /* ImagesListCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A12CA132D80780C00F586EA /* ImagesListCellDelegate.swift */; };
 		3A2A3F822D7848A7001EFFE6 /* URLSession+data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2A3F812D78489A001EFFE6 /* URLSession+data.swift */; };
 		3A5DA72D2D5A7EB1006971F5 /* OAuthTokenResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5DA72C2D5A7E9E006971F5 /* OAuthTokenResponseBody.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3A0062E22D837B3A00D56922 /* ProfileLogoutService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileLogoutService.swift; sourceTree = "<group>"; };
 		3A12CA132D80780C00F586EA /* ImagesListCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCellDelegate.swift; sourceTree = "<group>"; };
 		3A2A3F812D78489A001EFFE6 /* URLSession+data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+data.swift"; sourceTree = "<group>"; };
 		3A4DAFB42D17028E00ECACBA /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -162,6 +164,7 @@
 		3AC801352D514F5F00867A22 /* 0Auth2Files */ = {
 			isa = PBXGroup;
 			children = (
+				3A0062E22D837B3A00D56922 /* ProfileLogoutService.swift */,
 				3A2A3F812D78489A001EFFE6 /* URLSession+data.swift */,
 				3ABA40A72D75B6A000C40E61 /* ProfileImageService.swift */,
 				3ADF94982D73100600F5E964 /* ProfileService.swift */,
@@ -328,6 +331,7 @@
 				3AF8132C2D52125200A8CBCE /* WebViewControllerDelegateProtocol.swift in Sources */,
 				3A7C419A2D55A7AE0055253E /* OAuth2Service.swift in Sources */,
 				3AA382622D5FC30100F15272 /* AuthViewControllerDelegateProtocol.swift in Sources */,
+				3A0062E32D837B4C00D56922 /* ProfileLogoutService.swift in Sources */,
 				3ADF94992D73101500F5E964 /* ProfileService.swift in Sources */,
 				3A2A3F822D7848A7001EFFE6 /* URLSession+data.swift in Sources */,
 				3A5DA72D2D5A7EB1006971F5 /* OAuthTokenResponseBody.swift in Sources */,

@@ -7,26 +7,26 @@
 import UIKit
 import Foundation
 
-class ImagesListViewController: UIViewController, ImagesListCellDelegate {
-
+class ImagesListViewController: UIViewController {
+    
     @IBOutlet private var tableView: UITableView!
-
-    private let photosName: [String] = Array(0..<20).map { "\($0)" }
+    
+    
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private let imagesListService = ImagesListService.shared
     private var photos: [Photo] = []
     private var imagesListServiceObserver: NSObjectProtocol?
-
+    
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         return formatter
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-     
+        
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
         
         
@@ -37,7 +37,7 @@ class ImagesListViewController: UIViewController, ImagesListCellDelegate {
         
         ImagesListService.shared.fetchPhotosNextPage()
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showSingleImageSegueIdentifier {
             guard
@@ -47,8 +47,8 @@ class ImagesListViewController: UIViewController, ImagesListCellDelegate {
                 assertionFailure("Invalid segue destination")
                 return
             }
-            let photo = photos[indexPath.row]
-            viewController.imageURL = photo.fullImageURL
+            let photo = photos[indexPath.row] // ✅ Берём один объект photo из массива
+            viewController.imageURL = photo.fullImageURL // ✅ Передаём ссылку на изображение
         } else {
             super.prepare(for: segue, sender: sender)
         }
@@ -57,11 +57,16 @@ class ImagesListViewController: UIViewController, ImagesListCellDelegate {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
         photos = imagesListService.photos
+        
+        // Проверяем, что oldCount <= newCount, иначе выходим
+        guard oldCount <= newCount else {
+            tableView.reloadData()
+            return
+        }
+        
         if oldCount != newCount {
             tableView.performBatchUpdates {
-                let indexPaths = (oldCount..<newCount).map { i in
-                    IndexPath(row: i, section: 0)
-                }
+                let indexPaths = (oldCount..<newCount).map { IndexPath(row: $0, section: 0) }
                 tableView.insertRows(at: indexPaths, with: .automatic)
             } completion: { _ in }
         }
@@ -86,25 +91,14 @@ extension ImagesListViewController: UITableViewDataSource {
               let photo = photos[indexPath.row]
               cell.configure(with: photo)
               cell.delegate = self
-              
+        cell.setIsLiked(photo.isLiked)
               return cell
           }
           
       
 }
 
-extension ImagesListViewController {
-    func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return
-        }
-        cell.cellImage.image = image
-        cell.dateLabel.text = dateFormatter.string(from: Date())
-        let isLiked = indexPath.row % 2 == 1
-        let likeImage = isLiked ? UIImage(named: "like_button_on") : UIImage(named: "like_button_off")
-        cell.likeButton.setImage(likeImage, for: .normal)
-    }
-}
+
 
 
 extension ImagesListViewController: UITableViewDelegate {
@@ -118,9 +112,7 @@ extension ImagesListViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView, heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-        guard indexPath.row < photos.count else {
-            return UITableView.automaticDimension
-        }
+  
         
         let photo = photos[indexPath.row]
         let tableWidth = tableView.bounds.width - tableView.layoutMargins.left - tableView.layoutMargins.right
@@ -135,3 +127,30 @@ extension ImagesListViewController: UITableViewDelegate {
     
     
 }
+extension ImagesListViewController: ImagesListCellDelegate {
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        let photo = photos[indexPath.row]
+        
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                UIBlockingProgressHUD.dismiss()
+                switch result {
+                case .success:
+                    self.photos[indexPath.row] = self.imagesListService.photos.first { $0.id == photo.id } ?? photo
+                    cell.setIsLiked(self.photos[indexPath.row].isLiked) // 🛠 Мгновенно обновляем UI
+                case .failure:
+                    self.showLikeErrorAlert()
+                }
+            }
+        }
+    }
+    private func showLikeErrorAlert() {
+        let alert = UIAlertController(title: "Ошибка", message: "Не удалось поставить лайк(", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+        }
+    }
+

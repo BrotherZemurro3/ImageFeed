@@ -145,12 +145,23 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func didTapButton() {
-        let removeSuccessful: Bool = KeychainWrapper.standard.removeObject(forKey: "AuthToken")
-        if removeSuccessful {
-            print("[didTapButton] key is removes from keychain")
-        } else {
-            print("Ключ еще в кейчейне")
+        showLogoutAler()
+    }
+    
+    private func showLogoutAler() {
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            ProfileLogoutService.shared.logout()
+            UIApplication.shared.windows.first?.rootViewController = SplashViewController()
         }
+        
+        let noAction = UIAlertAction(title: "Нет", style: .cancel)
+        
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        
+        present(alert, animated: true)
     }
     
 

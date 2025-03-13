@@ -58,6 +58,12 @@ final class SplashViewController: UIViewController {
         
         window.rootViewController = tabBarController
     }
+    func log(_ message: String) {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss.SSS"
+        let timestamp = formatter.string(from: Date())
+        print("[\(timestamp)] \(message)")
+    }
 
 }
 // MARK: - AuthViewControllerDelegate

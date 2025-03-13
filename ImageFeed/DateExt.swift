@@ -10,7 +10,7 @@ private extension DateFormatter {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ru_RU")
         dateFormatter.dateFormat = "d MMMM YYYY"
-        
         return dateFormatter
     }()
+    
 }

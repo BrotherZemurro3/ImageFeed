@@ -10,7 +10,7 @@ struct Photo {
     let thumbImageURL: String
     let largeImageURL: String
     let fullImageURL: String
-    let isLiked: Bool
+    var isLiked: Bool
     
 
     }
@@ -21,7 +21,7 @@ struct PhotoResult: Decodable {
     let width: Int
     let height: Int
     let likes: Int
-    let likedByUser: Bool
+    let isLiked: Bool
     let description: String?
     let urls: UrlsResult
 
@@ -31,7 +31,7 @@ struct PhotoResult: Decodable {
         case width
         case height
         case likes
-        case likedByUser = "liked_by_user"
+        case isLiked = "liked_by_user"
         case description
         case urls
     }
@@ -44,11 +44,6 @@ struct PhotoResult: Decodable {
          let thumb: String
       
     }
-    
-
-
-
-
 
 final class ImagesListService {
  
@@ -71,7 +66,13 @@ final class ImagesListService {
          return formatter
      }()
     
-    
+    func clearPhotos() {
+            photos.removeAll()
+            lastLoadedPage = 0
+            NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self)
+            print("Фото и данные страниц удалены")
+        }
+        
     
      func fetchPhotosNextPage() {
         guard currentTask == nil else { return }
@@ -82,14 +83,24 @@ final class ImagesListService {
 
         let nextPage = (lastLoadedPage ?? 0) + 1
 
-        var urlComponents = URLComponents(string: "https://api.unsplash.com/photos")!
-        urlComponents.queryItems = [
-            URLQueryItem(name: "page", value: "\(nextPage)"),
-            URLQueryItem(name: "per_page", value: "\(photosPerPage)")
-        ]
+      
+         guard var urlComponents = URLComponents(string: "https://api.unsplash.com/photos") else {
+             print("❌ Ошибка создания URL")
+             return
+         }
 
-        var request = URLRequest(url: urlComponents.url!)
-        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+         urlComponents.queryItems = [
+             URLQueryItem(name: "page", value: "\(nextPage)"),
+             URLQueryItem(name: "per_page", value: "\(photosPerPage)")
+         ]
+
+         guard let url = urlComponents.url else {
+             print("❌ Ошибка формирования URL запроса")
+             return
+         }
+
+         var request = URLRequest(url: url)
+           request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
 
         print("📡 Загружаем страницу \(nextPage)")
 
@@ -110,7 +121,7 @@ final class ImagesListService {
                         thumbImageURL: $0.urls.thumb,
                         largeImageURL: $0.urls.regular,
                         fullImageURL: $0.urls.full,
-                        isLiked: $0.likedByUser
+                        isLiked: $0.isLiked
                     )
                 }
 
@@ -139,7 +150,58 @@ final class ImagesListService {
         currentTask.resume()
     }
 
-    
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        // ✅ Проверяем, есть ли токен авторизации
+        guard let authToken else {
+            print("Нет токена авторизации")
+            completion(.failure(NSError(domain: "No Token", code: 401, userInfo: nil)))
+            return
+        }
+
+        // ✅ Проверяем, что URL корректный
+        guard let url = URL(string: "https://api.unsplash.com/photos/\(photoId)/like") else {
+            completion(.failure(NSError(domain: "Invalid Url", code: 400, userInfo: nil)))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = isLike ? "POST" : "DELETE"
+
+        // ✅ Убрали `String(describing:)`, теперь просто подставляем `authToken`
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+
+        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+            guard let self = self else { return }
+
+            // ✅ Обрабатываем ошибку запроса
+            if let error = error {
+                print("Ошибка получения лайка: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(.failure(error)) // ✅ Теперь вызываем completion в главном потоке
+                }
+                return
+            }
+
+            // ✅ Используем `guard let` вместо `if let` для индекса фото
+            guard let index = self.photos.firstIndex(where: { $0.id == photoId }) else {
+                DispatchQueue.main.async {
+                    completion(.failure(NSError(domain: "Photo Not Found", code: 404, userInfo: nil)))
+                }
+                return
+            }
+
+            // ✅ Изменяем `isLiked` у фото
+            self.photos[index].isLiked.toggle()
+
+            // ✅ Обновляем UI в главном потоке
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: self)
+                completion(.success(())) // ✅ Уведомляем об успешном завершении
+            }
+        }
+        
+        task.resume() // ✅ Добавили вызов `resume()`, чтобы запрос выполнялся
+    }
 
     
 }

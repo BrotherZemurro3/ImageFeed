@@ -40,6 +40,7 @@ enum ProfileNetworkError: Error {
 }
 
 final class ProfileService {
+    
     private var currentTask: URLSessionTask?
     static var shared = ProfileService()
     private init() {}
@@ -65,6 +66,11 @@ final class ProfileService {
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
+    func clearProfile() {
+          profile = nil
+          NotificationCenter.default.post(name: ProfileService.didChangeNotification, object: self)
+          print("Профиль удален")
+      }
     
     // MARK: - Запрос профиля пользователя
  func fetchProfileInfo(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
