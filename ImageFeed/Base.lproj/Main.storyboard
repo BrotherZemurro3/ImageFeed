@@ -202,7 +202,10 @@
                                                         <constraint firstAttribute="width" constant="44" id="hze-zh-mZ3"/>
                                                     </constraints>
                                                     <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="like_button_on" title=""/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="like_button_off" title=""/>
+                                                    <connections>
+                                                        <action selector="likeButtonClicked" destination="pNF-Cs-VRu" eventType="touchUpInside" id="sNO-NO-MRM"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <color key="backgroundColor" name="YP Black"/>
@@ -348,7 +351,7 @@
         <image name="Backward" width="24" height="24"/>
         <image name="Sharing" width="50" height="50"/>
         <image name="auth_screen_logo" width="60" height="60"/>
-        <image name="like_button_on" width="42" height="42"/>
+        <image name="like_button_off" width="42" height="42"/>
         <image name="nav_back_button" width="9" height="16"/>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -50,7 +50,7 @@ extension URLSession {
                 fulfillCompletionOnMainThread(.failure(error))
             }
         }
-        
+        task.resume()
         return task
     }
 }

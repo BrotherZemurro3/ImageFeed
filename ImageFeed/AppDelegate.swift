@@ -7,14 +7,19 @@
 
 import UIKit
 import CoreData
-
+import ProgressHUD
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+    ) -> Bool {
+        ProgressHUD.animationType = .activityIndicator
+        ProgressHUD.colorHUD = .black
+        ProgressHUD.colorAnimation = .lightGray
         return true
     }
     
@@ -31,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         sceneConfiguration.delegateClass = SceneDelegate.self   // 2
         return sceneConfiguration
-    } 
+    }
     
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
