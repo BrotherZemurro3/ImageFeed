@@ -45,13 +45,13 @@ final class ProfileService {
     static var shared = ProfileService()
     private init() {}
     private(set) var profile: Profile? {
-         didSet {
-             NotificationCenter.default.post(
-                 name: ProfileService.didChangeNotification,
-                 object: self
-             )
-         }
-     }
+        didSet {
+            NotificationCenter.default.post(
+                name: ProfileService.didChangeNotification,
+                object: self
+            )
+        }
+    }
     static let didChangeNotification = Notification.Name("ProfileServiceDidChange")
     
     func updateProfile(_ profile: Profile) {
@@ -67,14 +67,14 @@ final class ProfileService {
         return request
     }
     func clearProfile() {
-          profile = nil
-          NotificationCenter.default.post(name: ProfileService.didChangeNotification, object: self)
-          print("Профиль удален")
-      }
+        profile = nil
+        NotificationCenter.default.post(name: ProfileService.didChangeNotification, object: self)
+        print("Профиль удален")
+    }
     
     // MARK: - Запрос профиля пользователя
- func fetchProfileInfo(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
-        currentTask?.cancel()
+    func fetchProfileInfo(token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
+        
         print("[ProfileService|fetchProfile]: Отправка запроса...")
         
         guard let url = URL(string: "https://api.unsplash.com/me") else {
@@ -82,7 +82,7 @@ final class ProfileService {
             completion(.failure(ProfileNetworkError.urlSessionError))
             return
         }
-     
+        
         
         print("URL successfully created: \(url)")
         guard let request = createAuthRequest(url: url, token: token) else {
@@ -98,6 +98,8 @@ final class ProfileService {
                 let profile = Profile(profileResult: profileResult)
                 self?.profile = profile
                 completion(.success(profile))
+                ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
+                
             case .failure(let error):
                 print("[ProfileService|fetchProfile]: Ошибка декодирования - \(error.localizedDescription)")
                 completion(.failure(error))

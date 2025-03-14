@@ -21,7 +21,7 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("[ProfileViewController]: Загружен")
-
+        
         view.backgroundColor = UIColor(named: "YP Black")
         profileImage.clipsToBounds = true
         setupUI()
@@ -31,7 +31,7 @@ final class ProfileViewController: UIViewController {
         updateProfile()
         
         
-
+        
         profileObserver = NotificationCenter.default.addObserver(
             forName: ProfileService.didChangeNotification,
             object: nil,
@@ -39,10 +39,10 @@ final class ProfileViewController: UIViewController {
         ) { [weak self] _ in
             print("[ProfileViewController]: Получено обновление профиля")
             DispatchQueue.main.async {
-                   self?.updateProfile()
-               }
-           }
-
+                self?.updateProfile()
+            }
+        }
+        
         profileImageObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.didChangeNotification,
             object: nil,
@@ -50,9 +50,9 @@ final class ProfileViewController: UIViewController {
         ) { [weak self] _ in
             print("[ProfileViewController]: Получено обновление аватарки")
             DispatchQueue.main.async {
-                  self?.updateAvatar()
-              }
-          }
+                self?.updateAvatar()
+            }
+        }
     }
     // MARK: - UI Setup
     private func setupUI() {
@@ -164,8 +164,8 @@ final class ProfileViewController: UIViewController {
         present(alert, animated: true)
     }
     
-
-
+    
+    
     // MARK: - Update Profile Details
     private func updateProfile() {
         guard let profile = ProfileService.shared.profile else {
@@ -177,11 +177,11 @@ final class ProfileViewController: UIViewController {
         }
         
         print("[ProfileViewController|updateProfile]: Обновляем профиль - \(profile)")
-
+        
         // Обновляем UI с данными профиля, если они присутствуют
         nameLabel.text = profile.name.isEmpty ? "No Name" : profile.name
         loginLabel.text = profile.loginName.isEmpty ? "No Login" : profile.loginName
         descriptionLabel.text = profile.bio?.isEmpty == false ? profile.bio : "No Bio"
     }
-
+    
 }

@@ -21,7 +21,7 @@ final class ProfileImageService {
             print("[ProfileImageService]: avatarURL обновлён -> \(String(describing: avatarURL))")
             NotificationCenter.default.post(
                 name: ProfileImageService.didChangeNotification,
-                object: self
+                object: nil
             )
         }
     }
@@ -77,6 +77,7 @@ final class ProfileImageService {
                 }
             case .failure(let error):
                 print("[ProfileImageService|fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
+                
                 completion(.failure(error))
             }
         }

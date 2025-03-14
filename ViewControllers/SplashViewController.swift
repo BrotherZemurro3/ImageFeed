@@ -35,7 +35,7 @@ final class SplashViewController: UIViewController {
     // MARK: - Проверка Аутентификации
     private func checkAuth() {
         if let token = storage.token {
-             fetchProfile(token: token) 
+            fetchProfile(token: token)
         } else {
             guard let authViewController = UIStoryboard(name: "Main", bundle: nil)
                 .instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else {
@@ -49,7 +49,7 @@ final class SplashViewController: UIViewController {
     // MARK: - Навигация
     private func switchTabBarController() {
         guard let window = UIApplication.shared.windows.first else {
-            assertionFailure("[SplashViewController]: Ошибка конфигурации")
+            assertionFailure("[SplashViewController|switchTabBarController]: Ошибка конфигурации")
             return
         }
         
@@ -58,13 +58,8 @@ final class SplashViewController: UIViewController {
         
         window.rootViewController = tabBarController
     }
-    func log(_ message: String) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss.SSS"
-        let timestamp = formatter.string(from: Date())
-        print("[\(timestamp)] \(message)")
-    }
-
+    
+    
 }
 // MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate {
@@ -86,27 +81,27 @@ extension SplashViewController: AuthViewControllerDelegate {
             
             switch result {
             case .success(let profile):
-                print("[SplashViewController]: Профиль загружен: \(profile)")
+                print("[SplashViewController|fetchProfile]: Профиль загружен: \(profile)")
                 
-                // ✅ Сохраняем профиль в `ProfileService`
+                //  Сохраняем профиль в `ProfileService`
                 ProfileService.shared.updateProfile(profile)
                 ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { imageResult in
                     switch imageResult {
                     case .success(let avatarURL):
                         // Обновить ProfileImageService.shared.avatarURL
                         ProfileImageService.shared.updateAvatarURL(avatarURL)
-                        print("[SplashViewController]: Аватарка загружена: \(avatarURL)")
+                        print("[SplashViewController|fetchProfile]: Аватарка загружена: \(avatarURL)")
                     case .failure(let error):
-                        print("[SplashViewController]: Ошибка загрузки аватарки: \(error.localizedDescription)")
+                        print("[SplashViewController|fetchProfile]: Ошибка загрузки аватарки: \(error.localizedDescription)")
                     }
                 }
                 
                 self.switchTabBarController()
                 
             case .failure(let error):
-                print("[SplashViewController]: Ошибка загрузки профиля: \(error.localizedDescription)")
+                print("[SplashViewController|fetchProfile]: Ошибка загрузки профиля: \(error.localizedDescription)")
                 showErrorAlert(message: "Не удалось загрузить профиль", token: token)
-
+                
             }
         }
     }
@@ -123,6 +118,6 @@ extension SplashViewController: AuthViewControllerDelegate {
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }
-        
-    }
+    
+}
 
