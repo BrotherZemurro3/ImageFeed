@@ -102,7 +102,7 @@ extension WebViewViewController: WKNavigationDelegate {
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
         if let code = code(from: navigationAction) {
-            print("[extension WebViewViewController|WKNavigationDelegate]:Код авторизации получен: \(code)")
+            print("[extension WebViewViewController|WKNavigationDelegate]: Код авторизации получен: \(code)")
             
             if delegate == nil {
                 print("[extension WebViewViewController|WKNavigationDelegate]: delegate равен nil!")

@@ -21,10 +21,16 @@ final class ProfileImageService {
             print("[ProfileImageService]: avatarURL обновлён -> \(String(describing: avatarURL))")
             NotificationCenter.default.post(
                 name: ProfileImageService.didChangeNotification,
-                object: self
+                object: nil
             )
         }
     }
+    
+    func clearAvatar() {
+           avatarURL = nil
+           NotificationCenter.default.post(name: ProfileImageService.didChangeNotification, object: self)
+               print("Аватарка удалена")
+       }
     private var currentTask: URLSessionTask?
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
@@ -71,6 +77,7 @@ final class ProfileImageService {
                 }
             case .failure(let error):
                 print("[ProfileImageService|fetchProfileImageURL]: Ошибка запроса: \(error.localizedDescription)")
+                
                 completion(.failure(error))
             }
         }
