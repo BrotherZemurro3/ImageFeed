@@ -30,13 +30,15 @@ enum Constants {
             self.defaultBaseURL = defaultBaseURL
             self.authURLString = authURLString
         }
+
         static var standard: AuthConfiguration {
-                return AuthConfiguration(accessKey: Constants.accessKey,
-                                         secretKey: Constants.secretKey,
-                                         redirectURI: Constants.redirectURI,
-                                         accessScope: Constants.accessScope,
-                                         authURLString: Constants.unsplashAuthorizeURLString,
-                                         defaultBaseURL: Constants.defaultBaseURL)
-            }
+            return AuthConfiguration(accessKey: Constants.accessKey,
+                                     secretKey: Constants.secretKey,
+                                     redirectURI: Constants.redirectURI,
+                                     accessScope: Constants.accessScope,
+                                     authURLString: Constants.unsplashAuthorizeURLString,
+                                     defaultBaseURL: Constants.defaultBaseURL)
         }
+    }
 }
+

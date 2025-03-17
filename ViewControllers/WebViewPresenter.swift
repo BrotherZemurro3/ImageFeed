@@ -5,35 +5,16 @@ import UIKit
 
 final class WebViewPresenter: WebViewPresenterProtocol {
     weak var view: WebViewViewControllerProtocol?
-    
-    func viewDidLoad() {
-        loadAuthView()
+    var authHelper: AuthHelperProtocol
+    init(authHelper: AuthHelperProtocol) {
+        self.authHelper = authHelper
     }
-    
-    
-    private func loadAuthView() {
-        guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizedURLString) else {
-            return
-        }
-        
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.accessScope)
-            
-        ]
-        
-        guard let url = urlComponents.url else {
-            return
-        }
-        print("[WebViewPresenter|loadAuthView]: Запрашиваем авторизацию по URL: \(url.absoluteString)")
-        let request = URLRequest(url: url)
+    func viewDidLoad() {
+        guard let request = authHelper.authRequest() else {return}
         didUpdateProgressValue(0)
         view?.load(request: request)
         
     }
-
     func didUpdateProgressValue(_ newValue: Double) {
         let newProgressValue = Float(newValue)
         view?.setProgressValue(newProgressValue)
@@ -46,18 +27,7 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     }
     
      func code(from url: URL) -> String? {
-          if let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
-            let items = urlComponents.queryItems,
-            let codeItem = items.first(where: { $0.name == "code" })
-        {
-            print("[WebViewPresenter|code(from url: URL): WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
-            print("[WebViewPresenter|code(from url: URL): WKNavigationAction)]: Код авторизации найден: \(codeItem.value ?? "nil")")
-            return codeItem.value
-        } else {
-            print("[WebViewPresenter|code(from url: URL): Код авторизации не найден")
-            return nil
-        }
+         authHelper.code(from: url)
     }
     
 }
