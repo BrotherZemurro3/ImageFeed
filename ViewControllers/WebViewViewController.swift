@@ -24,11 +24,11 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
              options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self = self else { return }
-                 self.updateProgress()
+                
              })
         webView.navigationDelegate = self
         presenter?.viewDidLoad()
-        updateProgress()
+        
     }
     
     // MARK: - Actions
@@ -51,7 +51,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
             forKeyPath: #keyPath(WKWebView.estimatedProgress),
             options: .new,
             context: nil)
-        updateProgress()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -64,7 +64,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
                                change: [NSKeyValueChangeKey : Any]?,
                                context: UnsafeMutableRawPointer?) {
         if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
+            presenter?.didUpdateProgressValue(webView.estimatedProgress)
         } else {
             super.observeValue(forKeyPath: keyPath,
                                of: object,
@@ -72,9 +72,12 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
                                context: context)
         }
     }
-    private func updateProgress() {
-        progressView.setProgress(Float(webView.estimatedProgress), animated: true)
-        progressView.isHidden = fabs(webView.estimatedProgress - 1.0) <= 0.0001
+
+    func setProgressValue(_ newValue: Float) {
+        progressView.progress = newValue
+    }
+    func setProgressHidden(_ isHidden: Bool) {
+        progressView.isHidden = isHidden
     }
 }
 
