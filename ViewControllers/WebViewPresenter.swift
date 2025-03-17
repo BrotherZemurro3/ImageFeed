@@ -27,7 +27,7 @@ final class WebViewPresenter: WebViewPresenterProtocol {
         guard let url = urlComponents.url else {
             return
         }
-        print("[WebViewController|loadAuthView]: Запрашиваем авторизацию по URL: \(url.absoluteString)")
+        print("[WebViewPresenter|loadAuthView]: Запрашиваем авторизацию по URL: \(url.absoluteString)")
         let request = URLRequest(url: url)
         didUpdateProgressValue(0)
         view?.load(request: request)
@@ -43,6 +43,21 @@ final class WebViewPresenter: WebViewPresenterProtocol {
     }
     func shouldHideProgress(for value: Float) -> Bool {
         abs(value - 1.0) <= 0.0001
+    }
+    
+     func code(from url: URL) -> String? {
+          if let urlComponents = URLComponents(string: url.absoluteString),
+            urlComponents.path == "/oauth/authorize/native",
+            let items = urlComponents.queryItems,
+            let codeItem = items.first(where: { $0.name == "code" })
+        {
+            print("[WebViewPresenter|code(from url: URL): WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
+            print("[WebViewPresenter|code(from url: URL): WKNavigationAction)]: Код авторизации найден: \(codeItem.value ?? "nil")")
+            return codeItem.value
+        } else {
+            print("[WebViewPresenter|code(from url: URL): Код авторизации не найден")
+            return nil
+        }
     }
     
 }

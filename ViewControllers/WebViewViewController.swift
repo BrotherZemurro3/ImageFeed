@@ -24,7 +24,6 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
              options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self = self else { return }
-                
              })
         webView.navigationDelegate = self
         presenter?.viewDidLoad()
@@ -107,22 +106,8 @@ extension WebViewViewController: WKNavigationDelegate {
     private func code(from navigationAction: WKNavigationAction) -> String? {
         if let url = navigationAction.request.url {
             print("[extension WebViewViewController|code(from navigationAction: WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
+            return presenter?.code(from: url)
         }
-        
-        if
-            let url = navigationAction.request.url,
-            
-                let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
-            let items = urlComponents.queryItems,
-            let codeItem = items.first(where: { $0.name == "code" })
-        {
-            print("[extension WebViewViewController|code(from navigationAction: WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
-            print("[code(from navigationAction: WKNavigationAction)]: Код авторизации найден: \(codeItem.value ?? "nil")")
-            return codeItem.value
-        } else {
-            print("[extension WebViewViewController|code(from navigationAction: WKNavigationAction)]: Код авторизации не найден")
-            return nil
-        }
+        return nil
     }
 }
