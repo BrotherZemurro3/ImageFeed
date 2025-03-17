@@ -13,6 +13,8 @@
 		3A9366F92D6E1639005AEF05 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9366F82D6E1639005AEF05 /* ProgressHUD */; };
 		3AA3824F2D5F737D00F15272 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA3823C2D5F737D00F15272 /* Constants.swift */; };
 		3AA382622D5FC30100F15272 /* AuthViewControllerDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA382612D5FC2E900F15272 /* AuthViewControllerDelegateProtocol.swift */; };
+		3AA3B72D2D88C526007673EB /* WebViewViewControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA3B72C2D88C521007673EB /* WebViewViewControllerProtocol.swift */; };
+		3AA3B7322D88C5DE007673EB /* WebViewPresenterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AA3B7312D88C5D8007673EB /* WebViewPresenterProtocol.swift */; };
 		3ABE1F6A2D78BB8300989469 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 3ABE1F692D78BB8300989469 /* Kingfisher */; };
 		3AEB81E52D7A03960047A48D /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 3AEB81E42D7A03960047A48D /* SwiftKeychainWrapper */; };
 		3AF8132C2D52125200A8CBCE /* WebViewControllerDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF8132B2D52124300A8CBCE /* WebViewControllerDelegateProtocol.swift */; };
@@ -44,6 +46,8 @@
 		3A7C41992D55A7A30055253E /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		3AA3823C2D5F737D00F15272 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3AA382612D5FC2E900F15272 /* AuthViewControllerDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewControllerDelegateProtocol.swift; sourceTree = "<group>"; };
+		3AA3B72C2D88C521007673EB /* WebViewViewControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerProtocol.swift; sourceTree = "<group>"; };
+		3AA3B7312D88C5D8007673EB /* WebViewPresenterProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenterProtocol.swift; sourceTree = "<group>"; };
 		3AF8132B2D52124300A8CBCE /* WebViewControllerDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewControllerDelegateProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -138,6 +142,8 @@
 		3AA382602D5FC2D300F15272 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				3AA3B7312D88C5D8007673EB /* WebViewPresenterProtocol.swift */,
+				3AA3B72C2D88C521007673EB /* WebViewViewControllerProtocol.swift */,
 				3A12CA132D80780C00F586EA /* ImagesListCellDelegateProtocol.swift */,
 				3AA382612D5FC2E900F15272 /* AuthViewControllerDelegateProtocol.swift */,
 				3AF8132B2D52124300A8CBCE /* WebViewControllerDelegateProtocol.swift */,
@@ -321,6 +327,8 @@
 				3AA382622D5FC30100F15272 /* AuthViewControllerDelegateProtocol.swift in Sources */,
 				3A5DA72D2D5A7EB1006971F5 /* OAuthTokenResponseBody.swift in Sources */,
 				3A12CA142D80781700F586EA /* ImagesListCellDelegateProtocol.swift in Sources */,
+				3AA3B72D2D88C526007673EB /* WebViewViewControllerProtocol.swift in Sources */,
+				3AA3B7322D88C5DE007673EB /* WebViewPresenterProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -3,6 +3,7 @@ import UIKit
 final class TabBarController: UITabBarController {
     override func awakeFromNib() {
         super.awakeFromNib()
+        UIView.setAnimationsEnabled(false)
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         
         let imagesListViewController = storyboard.instantiateViewController(
@@ -17,5 +18,6 @@ final class TabBarController: UITabBarController {
         )
         
         self.viewControllers = [imagesListViewController, profileViewController]
+        
     }
 }

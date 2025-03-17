@@ -32,24 +32,20 @@ final class AuthViewController: UIViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
-            print("[AuthViewController|prepare]: Переход на WebViewViewController")
-            
-            guard let webViewViewController = segue.destination as? WebViewViewController else {
-                assertionFailure("[AuthViewController|prepare]: Ошибка: не удалось привести segue.destination к WebViewViewController")
+            guard
+                let webViewViewController = segue.destination as? WebViewViewController
+            else {
+                assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
                 return
             }
-            
+            let webViewPresenter = WebViewPresenter()
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
             webViewViewController.delegate = self
-            
-            if webViewViewController.delegate == nil {
-                print("[AuthViewController|prepare]: delegate не установлен в prepare(for:sender:)!")
-            } else {
-                print("[AuthViewController|prepare]: delegate успешно установлен в prepare(for:sender:)")
-            }
         } else {
             super.prepare(for: segue, sender: sender)
         }
-    }
+    } 
     
 }
 
