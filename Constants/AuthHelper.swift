@@ -1,10 +1,7 @@
 import UIKit
 import Foundation
 
-protocol AuthHelperProtocol {
-    func authRequest() -> URLRequest?
-    func code(from url: URL) -> String?
-} 
+
 
 final class AuthHelper: AuthHelperProtocol {
     let configuration: AuthConfiguration
@@ -21,11 +18,11 @@ final class AuthHelper: AuthHelperProtocol {
         return URLRequest(url: url)
     }
     
-    private func authURL() -> URL? {
+    func authURL() -> URL? {
         guard
             var urlComponents = URLComponents(string: configuration.authURLString)
         else {
-            assertionFailure("Invalid authorization URL string: \(configuration.authURLString)")
+            assertionFailure("[AuthHelper|authURL]: Invalid authorization URL string: \(configuration.authURLString)")
             return nil
         }
         
@@ -49,11 +46,11 @@ final class AuthHelper: AuthHelperProtocol {
            let items = urlComponents.queryItems,
            let codeItem = items.first(where: { $0.name == "code" })
        {
-           print("[WebViewPresenter|code(from url: URL): WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
-           print("[WebViewPresenter|code(from url: URL): WKNavigationAction)]: Код авторизации найден: \(codeItem.value ?? "nil")")
+           print("[AuthHelper|code(from url: URL): WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
+           print("[AuthHelper|code(from url: URL): WKNavigationAction)]: Код авторизации найден: \(codeItem.value ?? "nil")")
            return codeItem.value
        } else {
-           print("[WebViewPresenter|code(from url: URL): Код авторизации не найден")
+           print("[AuthHelper|code(from url: URL): Код авторизации не найден")
            return nil
        }
    }
