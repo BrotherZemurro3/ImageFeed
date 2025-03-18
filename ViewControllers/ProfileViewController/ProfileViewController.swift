@@ -6,7 +6,7 @@ import SwiftKeychainWrapper
 
 
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController & ProfileViewControllerProtocol {
     // MARK: - UI Elements
     private let nameLabel = UILabel()
     private let loginLabel = UILabel()
@@ -17,43 +17,31 @@ final class ProfileViewController: UIViewController {
     private var profileObserver: NSObjectProtocol?
     private var profileImageObserver: NSObjectProtocol?
     var token: String?
+    var presenterProtocol: ProfileViewPresenterProtocol?
+    var presenter = ProfileViewPresenter()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("[ProfileViewController]: Загружен")
-        
         view.backgroundColor = UIColor(named: "YP Black")
         profileImage.clipsToBounds = true
         setupUI()
         
-        
-        updateAvatar()
-        updateProfile()
-        
-        
-        
-        profileObserver = NotificationCenter.default.addObserver(
-            forName: ProfileService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            print("[ProfileViewController]: Получено обновление профиля")
-            DispatchQueue.main.async {
-                self?.updateProfile()
-            }
+        // Подписываемся на обновления из Presenter
+        presenter.onProfileUpdate = { [weak self] profile in
+            self?.updateProfile(profile)
         }
         
-        profileImageObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            print("[ProfileViewController]: Получено обновление аватарки")
-            DispatchQueue.main.async {
-                self?.updateAvatar()
-            }
+        presenter.onAvatarUpdate = { [weak self] avatarURL in
+            self?.updateAvatar(avatarURL)
         }
+        
+        // Инициализируем данные и подписки
+        presenter.loadInitialData()
+        presenter.setupObservers()
+        
     }
+  
     // MARK: - UI Setup
     private func setupUI() {
         // Настройка profileImage
@@ -110,8 +98,8 @@ final class ProfileViewController: UIViewController {
         ])
     }
     // MARK: - Avatar Update
-    private func updateAvatar() {
-        guard let avatarURLString = ProfileImageService.shared.avatarURL, !avatarURLString.isEmpty else {
+    private func updateAvatar(_ avatarURL: String?) {
+        guard let avatarURLString = avatarURL, !avatarURLString.isEmpty else {
             print("[ProfileViewController|updateAvatar]: Ошибка: avatarURL отсутствует или пустое значение")
             profileImage.image = UIImage(named: "UserPhoto")  // Заглушка на случай отсутствия URL
             return
@@ -125,7 +113,6 @@ final class ProfileViewController: UIViewController {
         
         let processor = RoundCornerImageProcessor(cornerRadius: 50, backgroundColor: .ypBlack)
         
-        // Загрузка изображения с использованием Kingfisher
         profileImage.kf.setImage(
             with: url,
             placeholder: UIImage(named: "UserPhoto"),
@@ -145,10 +132,10 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func didTapButton() {
-        showLogoutAler()
+        showLogoutAlert()
     }
     
-    private func showLogoutAler() {
+   func showLogoutAlert() {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         
         let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
@@ -167,21 +154,20 @@ final class ProfileViewController: UIViewController {
     
     
     // MARK: - Update Profile Details
-    private func updateProfile() {
-        guard let profile = ProfileService.shared.profile else {
-            print("[ProfileViewController|updateProfile]: Профиль отсутствует или не был загружен")
-            nameLabel.text = "No Name"
-            loginLabel.text = "No Login"
-            descriptionLabel.text = "No Bio"
-            return
+    private func updateProfile(_ profile: Profile?) {
+            guard let profile = profile else {
+                print("[ProfileViewController|updateProfile]: Профиль отсутствует или не был загружен")
+                nameLabel.text = "No Name"
+                loginLabel.text = "No Login"
+                descriptionLabel.text = "No Bio"
+                return
+            }
+            
+            print("[ProfileViewController|updateProfile]: Обновляем профиль - \(profile)")
+            
+            // Обновляем UI с данными профиля, если они присутствуют
+            nameLabel.text = profile.name.isEmpty ? "No Name" : profile.name
+            loginLabel.text = profile.loginName.isEmpty ? "No Login" : profile.loginName
+            descriptionLabel.text = profile.bio?.isEmpty == false ? profile.bio : "No Bio"
         }
-        
-        print("[ProfileViewController|updateProfile]: Обновляем профиль - \(profile)")
-        
-        // Обновляем UI с данными профиля, если они присутствуют
-        nameLabel.text = profile.name.isEmpty ? "No Name" : profile.name
-        loginLabel.text = profile.loginName.isEmpty ? "No Login" : profile.loginName
-        descriptionLabel.text = profile.bio?.isEmpty == false ? profile.bio : "No Bio"
     }
-    
-}
