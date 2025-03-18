@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3A12CA142D80781700F586EA /* ImagesListCellDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A12CA132D80780C00F586EA /* ImagesListCellDelegateProtocol.swift */; };
+		3A1DFC8C2D895C42001A5BC6 /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A1DFC6E2D895C42001A5BC6 /* AuthHelper.swift */; };
 		3A5DA72D2D5A7EB1006971F5 /* OAuthTokenResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5DA72C2D5A7E9E006971F5 /* OAuthTokenResponseBody.swift */; };
 		3A7C419A2D55A7AE0055253E /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A7C41992D55A7A30055253E /* OAuth2Service.swift */; };
 		3A9366F92D6E1639005AEF05 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3A9366F82D6E1639005AEF05 /* ProgressHUD */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		3A12CA132D80780C00F586EA /* ImagesListCellDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCellDelegateProtocol.swift; sourceTree = "<group>"; };
+		3A1DFC6E2D895C42001A5BC6 /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
 		3A4DAFB42D17028E00ECACBA /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DAFCE2D17029200ECACBA /* ImageFeedTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A4DAFD82D17029200ECACBA /* ImageFeedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImageFeedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				3AA3B7372D88E0CE007673EB /* AuthConfiguration.swift */,
+				3A1DFC6E2D895C42001A5BC6 /* AuthHelper.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				3A7C419A2D55A7AE0055253E /* OAuth2Service.swift in Sources */,
 				3AA382622D5FC30100F15272 /* AuthViewControllerDelegateProtocol.swift in Sources */,
 				3A5DA72D2D5A7EB1006971F5 /* OAuthTokenResponseBody.swift in Sources */,
+				3A1DFC8C2D895C42001A5BC6 /* AuthHelper.swift in Sources */,
 				3A12CA142D80781700F586EA /* ImagesListCellDelegateProtocol.swift in Sources */,
 				3AA3B72D2D88C526007673EB /* WebViewViewControllerProtocol.swift in Sources */,
 				3AA3B7322D88C5DE007673EB /* WebViewPresenterProtocol.swift in Sources */,

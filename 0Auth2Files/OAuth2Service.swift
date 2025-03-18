@@ -9,7 +9,6 @@ final class OAuth2Service {
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
-    
     private init() {}
     
     enum OAuthError: Error {

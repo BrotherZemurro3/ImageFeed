@@ -13,7 +13,7 @@ enum Constants {
         }
         return url
     }()
-
+}
     struct AuthConfiguration {
         let accessKey: String
         let secretKey: String
