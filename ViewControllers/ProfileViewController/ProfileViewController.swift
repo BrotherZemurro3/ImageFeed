@@ -134,6 +134,10 @@ final class ProfileViewController: UIViewController & ProfileViewControllerProto
     private func didTapButton() {
         showLogoutAlert()
     }
+    func configure(presenter: ProfileViewPresenter) {
+        self.presenter = presenter
+        presenter.view = self
+       }
     
    func showLogoutAlert() {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
