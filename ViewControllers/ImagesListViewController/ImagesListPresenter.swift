@@ -1,10 +1,18 @@
-import UIKit
+import Foundation
 
+protocol ImagesListPresenterProtocol: AnyObject {
+    var photos: [Photo] { get }
+    var view: ImagesListViewControllerProtocol { get set }
+    func viewDidLoad()
+    func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void)
+    func photo(at indexPath: IndexPath) -> Photo
+}
 
 final class ImagesListPresenter: ImagesListPresenterProtocol {
- weak var view: ImagesListViewControllerProtocol?
+    var view: ImagesListViewControllerProtocol
     private let imagesListService = ImagesListService.shared
-    private var photos: [Photo] = []
+    internal var photos: [Photo] = []
     private var imagesListServiceObserver: NSObjectProtocol?
     
     init(view: ImagesListViewControllerProtocol) {
@@ -17,46 +25,30 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            self?.updateTableView()
+            self?.updatePhotos()
         }
+        fetchPhotosNextPage()
+    }
+    
+    func fetchPhotosNextPage() {
         imagesListService.fetchPhotosNextPage()
     }
     
-    func getPhotos() -> [Photo] {
-        return photos
+    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Void, Error>) -> Void) {
+        imagesListService.changeLike(photoId: photoId, isLike: isLike, completion)
     }
     
-    func updateTableView() {
+    func photo(at indexPath: IndexPath) -> Photo {
+        return photos[indexPath.row]
+    }
+    
+     func updatePhotos() {
+        let oldCount = photos.count
+        let newCount = imagesListService.photos.count
         photos = imagesListService.photos
-        view?.updateTableView()
-    }
-    
-    func loadMorePhotosIfNeeded(for index: Int) {
-        if index + 1 == photos.count {
-            imagesListService.fetchPhotosNextPage()
-        }
-    }
-    
-    func toggleLike(for index: Int, completion: @escaping () -> Void) {
-        let photo = photos[index]
-        UIBlockingProgressHUD.show()
-        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
-            DispatchQueue.main.async {
-                UIBlockingProgressHUD.dismiss()
-                switch result {
-                case .success:
-                    guard let self = self else { return }
-                    // Перезаписываем массив `photos` целиком
-                    self.photos = self.imagesListService.photos
-                    completion()
-                case .failure:
-                    self?.view?.showLikeErrorAlert()
-                }
-            }
+        
+        if oldCount != newCount {
+            view.updateTableViewAnimated(oldCount: oldCount, newCount: newCount)
         }
     }
 }
-
-
-
-

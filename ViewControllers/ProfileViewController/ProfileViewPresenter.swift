@@ -1,88 +1,82 @@
-import UIKit
+import Foundation
 
+protocol ProfilePresenterProtocol: AnyObject {
+    var view: ProfileViewProtocol? { get set }
+    func viewDidLoad()
+    func didTapLogout()
+    func updateProfile()
+    func updateAvatar()
+    func didConfirmLogout()
+}
 
-final class ProfileViewPresenter: ProfileViewPresenterProtocol {
+final class ProfilePresenter: ProfilePresenterProtocol {
+    weak var view: ProfileViewProtocol?
+    private let profileService: ProfileService
+    private let profileImageService: ProfileImageService
+    private let profileLogoutService: ProfileLogoutService
     
-    weak var view: ProfileViewControllerProtocol?
+    init(profileService: ProfileService = .shared,
+         profileImageService: ProfileImageService = .shared,
+         profileLogoutService: ProfileLogoutService = .shared) {
+        self.profileService = profileService
+        self.profileImageService = profileImageService
+        self.profileLogoutService = profileLogoutService
+    }
     
-    var profile: Profile? {
-         didSet {
-             onProfileUpdate?(profile)
-         }
-     }
-     
-     var avatarURL: String? {
-         didSet {
-             onAvatarUpdate?(avatarURL)
-         }
-     }
-
-     var onProfileUpdate: ((Profile?) -> Void)?
-     var onAvatarUpdate: ((String?) -> Void)?
-     
-     private var profileObserver: NSObjectProtocol?
-     private var profileImageObserver: NSObjectProtocol?
-
+    func viewDidLoad() {
+        updateProfile()
+        updateAvatar()
+        
+        NotificationCenter.default.addObserver(
+            forName: ProfileService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateProfile()
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: ProfileImageService.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.updateAvatar()
+        }
+    }
     
-    func setupObservers() {
-           profileObserver = NotificationCenter.default.addObserver(
-               forName: ProfileService.didChangeNotification,
-               object: nil,
-               queue: .main
-           ) { [weak self] _ in
-               self?.profile = ProfileService.shared.profile
-           }
-
-           profileImageObserver = NotificationCenter.default.addObserver(
-               forName: ProfileImageService.didChangeNotification,
-               object: nil,
-               queue: .main
-           ) { [weak self] _ in
-               self?.avatarURL = ProfileImageService.shared.avatarURL
-           }
-       }
-
-       func loadInitialData() {
-           profile = ProfileService.shared.profile
-           avatarURL = ProfileImageService.shared.avatarURL
-       }
-
-       // Переносим логику обновления профиля в презентер
-       func updateProfile() {
-           guard let profile = ProfileService.shared.profile else {
-               print("[ProfileViewPresenter|updateProfile]: Профиль отсутствует или не был загружен")
-               onProfileUpdate?(nil)
-               return
-           }
-           print("[ProfileViewPresenter|updateProfile]: Обновляем профиль - \(profile)")
-           onProfileUpdate?(profile)
-       }
-       
-       // Переносим логику обновления аватара в презентер
+    func didTapLogout() {
+        view?.showLogoutAlert() // Сообщаем View показать алерт
+    }
+    
+    func didConfirmLogout() {
+        profileLogoutService.logout()
+        view?.navigateToSplashScreen() // Переходим на SplashScreen
+    }
+    
+    func updateProfile() {
+        guard let profile = profileService.profile else {
+            view?.displayProfile(name: "No Name", login: "No Login", bio: "No Bio")
+            return
+        }
+        
+        view?.displayProfile(
+            name: profile.name.isEmpty ? "No Name" : profile.name,
+            login: profile.loginName.isEmpty ? "No Login" : profile.loginName,
+            bio: profile.bio?.isEmpty == false ? profile.bio : "No Bio"
+        )
+    }
+    
     func updateAvatar() {
-          guard let avatarURLString = ProfileImageService.shared.avatarURL, !avatarURLString.isEmpty else {
-              print("[ProfileViewPresenter|updateAvatar]: Ошибка: avatarURL отсутствует или пустое значение")
-              onAvatarUpdate?(nil)
-              return
-          }
-          
-          guard let url = URL(string: avatarURLString) else {
-              print("[ProfileViewPresenter|updateAvatar]: Ошибка: avatarURL не может быть преобразован в URL: \(avatarURLString)")
-              onAvatarUpdate?(nil)
-              return
-          }
-          
-          onAvatarUpdate?(avatarURLString)
-      }
-
-       deinit {
-           if let profileObserver = profileObserver {
-               NotificationCenter.default.removeObserver(profileObserver)
-           }
-           if let profileImageObserver = profileImageObserver {
-               NotificationCenter.default.removeObserver(profileImageObserver)
-           }
-       }
-   }
-    
-
+        guard let avatarURLString = profileImageService.avatarURL, !avatarURLString.isEmpty else {
+            view?.displayAvatar(url: nil)
+            return
+        }
+        
+        guard let url = URL(string: avatarURLString) else {
+            view?.displayAvatar(url: nil)
+            return
+        }
+        
+        view?.displayAvatar(url: url)
+    }
+}

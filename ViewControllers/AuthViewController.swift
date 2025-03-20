@@ -15,7 +15,7 @@ final class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         entryButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        
+        entryButton.accessibilityIdentifier = "Authenticate"
         print("[AuthViewController|viewDidLoad]: Создан экземпляр AuthViewController: \(self)")
         if delegate == nil {
             print("[AuthViewController|viewDidLoad]: delegate в AuthViewController равен nil после возврата из WebView!")

@@ -1,7 +1,6 @@
 import UIKit
 import Foundation
 
-
 struct Photo {
     let id: String
     let size: CGSize
@@ -45,7 +44,7 @@ struct UrlsResult: Decodable {
     
 }
 
-final class ImagesListService {
+ class ImagesListService {
     
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     

@@ -16,7 +16,7 @@ struct UserResult: Codable {
 final class ProfileImageService {
     static var shared = ProfileImageService()
     private init() {}
-    private(set) var avatarURL: String? {
+   var avatarURL: String? {
         didSet {
             print("[ProfileImageService]: avatarURL обновлён -> \(String(describing: avatarURL))")
             NotificationCenter.default.post(

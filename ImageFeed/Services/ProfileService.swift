@@ -18,7 +18,7 @@ struct ProfileResult: Codable {
     }
 }
 
-struct Profile {
+struct Profile: Equatable {
     let username: String
     let name: String
     let loginName: String
@@ -44,7 +44,7 @@ final class ProfileService {
     private var currentTask: URLSessionTask?
     static var shared = ProfileService()
     private init() {}
-    private(set) var profile: Profile? {
+   var profile: Profile? {
         didSet {
             NotificationCenter.default.post(
                 name: ProfileService.didChangeNotification,
