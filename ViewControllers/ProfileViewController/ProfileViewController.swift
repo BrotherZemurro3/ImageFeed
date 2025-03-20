@@ -132,9 +132,13 @@ final class ProfileViewController: UIViewController, ProfileViewProtocol {
     }
     
     func navigateToSplashScreen() {
-        UIApplication.shared.windows.first?.rootViewController = SplashViewController()
+        let splashViewController = SplashViewController()
+        guard let window = UIApplication.shared.windows.first else {
+            fatalError("Нет доступного окна")
+        }
+        window.rootViewController = splashViewController
+        window.makeKeyAndVisible()
     }
-    
     func showLogoutAlert() {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         

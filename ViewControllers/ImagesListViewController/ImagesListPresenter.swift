@@ -42,7 +42,7 @@ final class ImagesListPresenter: ImagesListPresenterProtocol {
         return photos[indexPath.row]
     }
     
-     func updatePhotos() {
+    func updatePhotos() {
         let oldCount = photos.count
         let newCount = imagesListService.photos.count
         photos = imagesListService.photos

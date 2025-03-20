@@ -75,7 +75,7 @@ class ImagesListPresenterTests: XCTestCase {
 }
 
 class ImagesListPresenterSpy: ImagesListPresenterProtocol {
-     var view: ImagesListViewControllerProtocol // Не опциональное, но weak
+    var view: ImagesListViewControllerProtocol // Не опциональное, но weak
     
     var photos: [Photo] = []
     

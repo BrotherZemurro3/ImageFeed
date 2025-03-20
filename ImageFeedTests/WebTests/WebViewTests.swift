@@ -7,29 +7,24 @@
 
 import XCTest
 @testable import ImageFeed
+import WebKit
+import Foundation
 
 final class WebViewTests: XCTestCase {
     
     func testViewControllerCallsViewDidLoad() {
         
-        //given
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let viewController = storyboard.instantiateViewController(withIdentifier: "WebViewViewController") as! WebViewViewController
         let presenter = WebViewPresenterSpy()
         viewController.presenter = presenter
         presenter.view = viewController
         
-        
-        //when
         _ = viewController.view
         
-        
-        //then
-        XCTAssertTrue(presenter.viewDidLoadCalled) // behaviout verification
-        
-        
-        
+        XCTAssertTrue(presenter.viewDidLoadCalled)
     }
+    
     
     
     
@@ -61,7 +56,7 @@ final class WebViewTests: XCTestCase {
         let shouldHideProgress = presenter.shouldHideProgress(for: progress)
         
         //then
-        XCTAssert(shouldHideProgress)
+        XCTAssertFalse(shouldHideProgress) // Прогресс не должен быть скрыт
     }
     
     func testProgressHiddenWhenOne() {
@@ -81,7 +76,7 @@ final class WebViewTests: XCTestCase {
         //given
         let configuration = AuthConfiguration.standard
         let authHelper = AuthHelper(configuration: configuration)
-    
+        
         //when
         let url = authHelper.authURL()
         
@@ -92,10 +87,10 @@ final class WebViewTests: XCTestCase {
         
         //then
         XCTAssertTrue(urlString.contains(configuration.authURLString))
-           XCTAssertTrue(urlString.contains(configuration.accessKey))
-           XCTAssertTrue(urlString.contains(configuration.redirectURI))
-           XCTAssertTrue(urlString.contains("code"))
-           XCTAssertTrue(urlString.contains(configuration.accessScope))
+        XCTAssertTrue(urlString.contains(configuration.accessKey))
+        XCTAssertTrue(urlString.contains(configuration.redirectURI))
+        XCTAssertTrue(urlString.contains("code"))
+        XCTAssertTrue(urlString.contains(configuration.accessScope))
         
     }
     

@@ -26,6 +26,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
                  guard let self = self else { return }
              })
         webView.navigationDelegate = self
+        webView.accessibilityIdentifier = "WebViewViewController"
         presenter?.viewDidLoad()
         
     }
@@ -71,7 +72,7 @@ final class WebViewViewController: UIViewController & WebViewViewControllerProto
                                context: context)
         }
     }
-
+    
     func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue
     }

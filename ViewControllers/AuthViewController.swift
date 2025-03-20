@@ -46,7 +46,7 @@ final class AuthViewController: UIViewController {
         } else {
             super.prepare(for: segue, sender: sender)
         }
-    } 
+    }
     
 }
 

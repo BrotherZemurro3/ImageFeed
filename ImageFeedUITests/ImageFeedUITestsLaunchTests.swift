@@ -4,7 +4,7 @@
 //
 //  Created by Дионисий Коневиченко on 21.12.2024.
 //
-/*
+
 import XCTest
 
 final class ImageFeedUITestsLaunchTests: XCTestCase {
@@ -31,4 +31,4 @@ final class ImageFeedUITestsLaunchTests: XCTestCase {
         add(attachment)
     }
 }
-*/
+

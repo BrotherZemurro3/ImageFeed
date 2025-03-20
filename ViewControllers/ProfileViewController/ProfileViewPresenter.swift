@@ -45,12 +45,17 @@ final class ProfilePresenter: ProfilePresenterProtocol {
     }
     
     func didTapLogout() {
-        view?.showLogoutAlert() // Сообщаем View показать алерт
+        view?.showLogoutAlert()
+        // Сообщаем View показать алерт
     }
     
     func didConfirmLogout() {
+        guard let view = view else {
+            print("Ошибка: view равно nil")
+            return
+        }
         profileLogoutService.logout()
-        view?.navigateToSplashScreen() // Переходим на SplashScreen
+        view.navigateToSplashScreen()
     }
     
     func updateProfile() {

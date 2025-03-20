@@ -101,23 +101,23 @@ final class ProfileViewControllerSpy: ProfileViewProtocol {
     var isShowLogoutAlertCalled = false
     
     // MARK: - Override Methods
-   func displayProfile(name: String, login: String, bio: String?) {
+    func displayProfile(name: String, login: String, bio: String?) {
         isDisplayProfileCalled = true
         displayedName = name
         displayedLogin = login
         displayedBio = bio
     }
     
- func displayAvatar(url: URL?) {
+    func displayAvatar(url: URL?) {
         isDisplayAvatarCalled = true
         displayedAvatarURL = url
     }
     
- func navigateToSplashScreen() {
+    func navigateToSplashScreen() {
         isNavigateToSplashScreenCalled = true
     }
     
- func showLogoutAlert() {
+    func showLogoutAlert() {
         isShowLogoutAlertCalled = true
     }
 }

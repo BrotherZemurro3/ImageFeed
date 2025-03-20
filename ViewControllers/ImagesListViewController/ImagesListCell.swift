@@ -41,7 +41,4 @@ override func prepareForReuse() {
         dateLabel.text = photo.createdAt?.dateTimeString ?? "Неизвестно"
     }
     
-    
-
-    
 }

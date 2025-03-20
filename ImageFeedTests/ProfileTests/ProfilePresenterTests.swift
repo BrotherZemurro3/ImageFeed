@@ -105,8 +105,8 @@ final class ProfilePresenterSpy: ProfilePresenterProtocol {
     var isShowLogoutAlertCalled = false
     
     func navigateToSplashScreen() {
-           isNavigateToSplashScreenCalled = true
-       }
+        isNavigateToSplashScreenCalled = true
+    }
     func viewDidLoad() {
         isViewDidLoadCalled = true
     }
@@ -115,8 +115,8 @@ final class ProfilePresenterSpy: ProfilePresenterProtocol {
         isDidTapLogoutCalled = true
     }
     func showLogoutAlert() {
-            isShowLogoutAlertCalled = true
-        }
+        isShowLogoutAlertCalled = true
+    }
     
     func didConfirmLogout() {
         isDidConfirmLogoutCalled = true

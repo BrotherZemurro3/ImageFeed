@@ -5,7 +5,7 @@ import Foundation
 
 final class AuthHelper: AuthHelperProtocol {
     let configuration: AuthConfiguration
-
+    
     init(configuration: AuthConfiguration = .standard) {
         self.configuration = configuration
     }
@@ -41,19 +41,19 @@ final class AuthHelper: AuthHelperProtocol {
     }
     
     func code(from url: URL) -> String? {
-         if let urlComponents = URLComponents(string: url.absoluteString),
+        if let urlComponents = URLComponents(string: url.absoluteString),
            urlComponents.path == "/oauth/authorize/native",
            let items = urlComponents.queryItems,
            let codeItem = items.first(where: { $0.name == "code" })
-       {
-           print("[AuthHelper|code(from url: URL): WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
-           print("[AuthHelper|code(from url: URL): WKNavigationAction)]: Код авторизации найден: \(codeItem.value ?? "nil")")
-           return codeItem.value
-       } else {
-           print("[AuthHelper|code(from url: URL): Код авторизации не найден")
-           return nil
-       }
-   }
+        {
+            print("[AuthHelper|code(from url: URL): WKNavigationAction)]: Перенаправление на URL: \(url.absoluteString)")
+            print("[AuthHelper|code(from url: URL): WKNavigationAction)]: Код авторизации найден: \(codeItem.value ?? "nil")")
+            return codeItem.value
+        } else {
+            print("[AuthHelper|code(from url: URL): Код авторизации не найден")
+            return nil
+        }
+    }
     
     
 }
