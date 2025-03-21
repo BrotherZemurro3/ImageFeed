@@ -6,54 +6,39 @@ import SwiftKeychainWrapper
 
 
 
-final class ProfileViewController: UIViewController {
+
+
+protocol ProfileViewProtocol: AnyObject {
+    func displayProfile(name: String, login: String, bio: String?)
+    func displayAvatar(url: URL?)
+    func navigateToSplashScreen()
+    func showLogoutAlert() // Новый метод для показа алерта
+}
+
+
+final class ProfileViewController: UIViewController, ProfileViewProtocol {
     // MARK: - UI Elements
-    private let nameLabel = UILabel()
-    private let loginLabel = UILabel()
-    private let descriptionLabel = UILabel()
-    private let profileService = ProfileService.shared
-    private let profileImage = UIImageView()
-    private var profile: Profile?
-    private var profileObserver: NSObjectProtocol?
-    private var profileImageObserver: NSObjectProtocol?
-    var token: String?
+     let nameLabel = UILabel()
+     let loginLabel = UILabel()
+     let descriptionLabel = UILabel()
+     let profileImage = UIImageView()
+     var presenter: ProfilePresenterProtocol!
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         print("[ProfileViewController]: Загружен")
         
+        presenter = ProfilePresenter()
+        presenter.view = self
+        
         view.backgroundColor = UIColor(named: "YP Black")
         profileImage.clipsToBounds = true
         setupUI()
         
-        
-        updateAvatar()
-        updateProfile()
-        
-        
-        
-        profileObserver = NotificationCenter.default.addObserver(
-            forName: ProfileService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            print("[ProfileViewController]: Получено обновление профиля")
-            DispatchQueue.main.async {
-                self?.updateProfile()
-            }
-        }
-        
-        profileImageObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            print("[ProfileViewController]: Получено обновление аватарки")
-            DispatchQueue.main.async {
-                self?.updateAvatar()
-            }
-        }
+        presenter.viewDidLoad()
     }
+    
     // MARK: - UI Setup
     private func setupUI() {
         // Настройка profileImage
@@ -109,51 +94,56 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.topAnchor.constraint(equalTo: loginLabel.bottomAnchor, constant: 8),
         ])
     }
-    // MARK: - Avatar Update
-    private func updateAvatar() {
-        guard let avatarURLString = ProfileImageService.shared.avatarURL, !avatarURLString.isEmpty else {
-            print("[ProfileViewController|updateAvatar]: Ошибка: avatarURL отсутствует или пустое значение")
-            profileImage.image = UIImage(named: "UserPhoto")  // Заглушка на случай отсутствия URL
-            return
-        }
-        
-        guard let url = URL(string: avatarURLString) else {
-            print("[ProfileViewController|updateAvatar]: Ошибка: avatarURL не может быть преобразован в URL: \(avatarURLString)")
-            profileImage.image = UIImage(named: "UserPhoto")  // Заглушка на случай неверного URL
-            return
-        }
-        
-        let processor = RoundCornerImageProcessor(cornerRadius: 50, backgroundColor: .ypBlack)
-        
-        // Загрузка изображения с использованием Kingfisher
-        profileImage.kf.setImage(
-            with: url,
-            placeholder: UIImage(named: "UserPhoto"),
-            options: [
-                .processor(processor),
-                .transition(.fade(0.3))
-            ]) { result in
+    
+    @objc
+     func didTapButton() {
+        presenter.didTapLogout() // Сообщаем презентеру о нажатии на кнопку
+    }
+    
+    // MARK: - ProfileViewProtocol
+    func displayProfile(name: String, login: String, bio: String?) {
+        nameLabel.text = name
+        loginLabel.text = login
+        descriptionLabel.text = bio
+    }
+    
+    func displayAvatar(url: URL?) {
+        if let url = url {
+            let processor = RoundCornerImageProcessor(cornerRadius: 50, backgroundColor: .ypBlack)
+            profileImage.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "UserPhoto"),
+                options: [
+                    .processor(processor),
+                    .transition(.fade(0.3))
+                ]
+            ) { result in
                 switch result {
                 case .success(let value):
                     print("[ProfileViewController|updateAvatar]: Аватарка успешно загружена с URL: \(value.source.url?.absoluteString ?? "неизвестно")")
                 case .failure(let error):
                     print("[ProfileViewController|updateAvatar]: Ошибка при загрузке аватарки: \(error.localizedDescription)")
-                    self.profileImage.image = UIImage(named: "UserPhoto")  // Заглушка в случае ошибки
+                    self.profileImage.image = UIImage(named: "UserPhoto")
                 }
             }
+        } else {
+            profileImage.image = UIImage(named: "UserPhoto")
+        }
     }
     
-    @objc
-    private func didTapButton() {
-        showLogoutAler()
+    func navigateToSplashScreen() {
+        let splashViewController = SplashViewController()
+        guard let window = UIApplication.shared.windows.first else {
+            fatalError("Нет доступного окна")
+        }
+        window.rootViewController = splashViewController
+        window.makeKeyAndVisible()
     }
-    
-    private func showLogoutAler() {
+    func showLogoutAlert() {
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         
-        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
-            ProfileLogoutService.shared.logout()
-            UIApplication.shared.windows.first?.rootViewController = SplashViewController()
+        let yesAction = UIAlertAction(title: "Да", style: .default) { [weak self] _ in
+            self?.presenter.didConfirmLogout() // Сообщаем презентеру о подтверждении выхода
         }
         
         let noAction = UIAlertAction(title: "Нет", style: .cancel)
@@ -163,25 +153,4 @@ final class ProfileViewController: UIViewController {
         
         present(alert, animated: true)
     }
-    
-    
-    
-    // MARK: - Update Profile Details
-    private func updateProfile() {
-        guard let profile = ProfileService.shared.profile else {
-            print("[ProfileViewController|updateProfile]: Профиль отсутствует или не был загружен")
-            nameLabel.text = "No Name"
-            loginLabel.text = "No Login"
-            descriptionLabel.text = "No Bio"
-            return
-        }
-        
-        print("[ProfileViewController|updateProfile]: Обновляем профиль - \(profile)")
-        
-        // Обновляем UI с данными профиля, если они присутствуют
-        nameLabel.text = profile.name.isEmpty ? "No Name" : profile.name
-        loginLabel.text = profile.loginName.isEmpty ? "No Login" : profile.loginName
-        descriptionLabel.text = profile.bio?.isEmpty == false ? profile.bio : "No Bio"
-    }
-    
 }

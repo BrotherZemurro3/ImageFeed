@@ -15,7 +15,7 @@ final class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         entryButton.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        
+        entryButton.accessibilityIdentifier = "Authenticate"
         print("[AuthViewController|viewDidLoad]: Создан экземпляр AuthViewController: \(self)")
         if delegate == nil {
             print("[AuthViewController|viewDidLoad]: delegate в AuthViewController равен nil после возврата из WebView!")
@@ -32,20 +32,17 @@ final class AuthViewController: UIViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showWebViewSegueIdentifier {
-            print("[AuthViewController|prepare]: Переход на WebViewViewController")
-            
-            guard let webViewViewController = segue.destination as? WebViewViewController else {
-                assertionFailure("[AuthViewController|prepare]: Ошибка: не удалось привести segue.destination к WebViewViewController")
+            guard
+                let webViewViewController = segue.destination as? WebViewViewController
+            else {
+                assertionFailure("Failed to prepare for \(showWebViewSegueIdentifier)")
                 return
             }
-            
+            let authHelper = AuthHelper()
+            let webViewPresenter = WebViewPresenter(authHelper: authHelper)
+            webViewViewController.presenter = webViewPresenter
+            webViewPresenter.view = webViewViewController
             webViewViewController.delegate = self
-            
-            if webViewViewController.delegate == nil {
-                print("[AuthViewController|prepare]: delegate не установлен в prepare(for:sender:)!")
-            } else {
-                print("[AuthViewController|prepare]: delegate успешно установлен в prepare(for:sender:)")
-            }
         } else {
             super.prepare(for: segue, sender: sender)
         }

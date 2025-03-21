@@ -15,6 +15,7 @@ final class ProfileLogoutService {
        ProfileService.shared.clearProfile()
        ProfileImageService.shared.clearAvatar()
        ImagesListService.shared.clearPhotos()
+       
    }
 
    private func cleanCookies() {
